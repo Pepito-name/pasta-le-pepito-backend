@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
+import { Dish } from './entities/dish.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DishService {
-  create(payload: CreateDishDto) {
-    return 'This action adds a new dish';
+  constructor(
+    @InjectRepository(Dish)
+    private dishRepository: Repository<Dish>,
+  ) {}
+
+  async create(payload: CreateDishDto) {
+    const newDish = new Dish(payload);
+    return await this.dishRepository.save(newDish);
   }
 
   findAll() {
