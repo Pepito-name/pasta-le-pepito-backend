@@ -4,7 +4,7 @@ interface IDish {
   title: string;
   volume?: number | null;
   weight?: number | null;
-  composition: string | null;
+  composition?: string | null;
   price: number;
   image: string | null;
   type: string | null;
@@ -12,7 +12,6 @@ interface IDish {
 export const dish: IDish[] = [
   {
     title: 'Pepsi zero',
-    composition: '',
     price: 72,
     image:
       'https://images.bolt.eu/store/2024/2024-04-07/c128ea29-2204-4644-bf60-b2f4b8a05c3d.webp',
@@ -42,8 +41,7 @@ export const dish: IDish[] = [
 
   {
     title: 'Вода негазована',
-    weight: 0.5,
-    composition: '0.5л',
+    volume: 0.5,
     price: 68,
     image:
       'https://images.bolt.eu/store/2023/2023-02-16/1a4c621b-ee06-4c79-9ea3-8181077de4b5.jpeg',
@@ -133,8 +131,7 @@ export const dish: IDish[] = [
 
   {
     title: 'Пепсі',
-    weight: 0.33,
-    composition: '',
+    volume: 0.33,
     price: 72,
     image:
       'https://images.bolt.eu/store/2023/2023-02-16/a6a6581a-f111-4009-bc8e-d3d351a204d7.jpeg',
