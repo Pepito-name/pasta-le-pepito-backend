@@ -1,10 +1,11 @@
 import { DishType } from 'src/common';
-import { Column, DeepPartial, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
+import { IDish } from '../../database/seeds/dish-data';
 
 @Entity()
 export class Dish {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -13,7 +14,7 @@ export class Dish {
   @Column({ nullable: true })
   weight: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'float', nullable: true })
   volume: number;
 
   @Column({ nullable: true })
@@ -22,8 +23,8 @@ export class Dish {
   @Column()
   price: number;
 
-  @Column()
-  image: string;
+  @Column({ nullable: true })
+  image: string | null;
 
   @Column({
     type: 'enum',
@@ -38,7 +39,7 @@ export class Dish {
   @Column({ type: 'boolean', default: false })
   new: boolean;
 
-  constructor(payload: DeepPartial<CreateDishDto>) {
+  constructor(payload: CreateDishDto | IDish) {
     if (!payload) return;
 
     this.title = payload.title;
