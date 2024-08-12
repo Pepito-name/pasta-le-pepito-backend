@@ -1,14 +1,17 @@
 import { DishType } from 'src/common';
 
-interface IDish {
+export interface IDish {
   title: string;
   volume?: number | null;
   weight?: number | null;
   composition?: string | null;
   price: number;
   image: string | null;
-  type: string | null;
+  type?: DishType | null;
+  hit?: boolean | null;
+  new?: boolean | null;
 }
+
 export const dish: IDish[] = [
   {
     title: 'Pepsi zero',
@@ -126,7 +129,6 @@ export const dish: IDish[] = [
     price: 235,
     image:
       'https://images.bolt.eu/store/2022/2022-06-22/1e6440c7-d8e6-4349-9883-2eca6cac8eaa.jpeg',
-    type: '',
   },
 
   {
