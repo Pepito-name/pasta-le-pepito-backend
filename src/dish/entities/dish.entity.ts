@@ -25,7 +25,11 @@ export class Dish {
   @Column()
   image: string;
 
-  @Column({ type: 'enum' })
+  @Column({
+    type: 'enum',
+    enum: DishType,
+    default: DishType.Drink,
+  })
   type: DishType;
 
   @Column({ type: 'boolean', default: false })
