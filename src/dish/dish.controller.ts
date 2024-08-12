@@ -10,8 +10,10 @@ import {
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('dish')
+@ApiTags('dish')
 export class DishController {
   constructor(private readonly dishService: DishService) {}
 
