@@ -14,7 +14,6 @@ export class DishSeedService {
   async run() {
     const count = await this.dishRepository.count();
     if (count === 0) {
-      console.log('dish :>> ', dish.length);
       await Promise.all(
         dish.map(async (d) => {
           const newDish = new Dish(d);
