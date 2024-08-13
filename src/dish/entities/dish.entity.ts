@@ -1,7 +1,7 @@
 import { DishType } from 'src/common';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
-import { IDish } from '../../database/seeds/dish-data';
+import { IDish } from '../../database/seeds/dish/dish-data';
 
 @Entity()
 export class Dish {
