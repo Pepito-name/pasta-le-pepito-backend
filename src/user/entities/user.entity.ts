@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
+import { Role } from 'src/common';
 import { Order } from 'src/order/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Entity()
 export class User {
@@ -17,11 +19,14 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
   @Column()
   isRegistered: boolean;
+
+  @Column({ type: 'enum', enum: Role, default: Role.User })
+  role: Role;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

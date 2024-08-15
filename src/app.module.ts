@@ -11,10 +11,32 @@ import { OrderItemModule } from './order-item/order-item.module';
 import { OrderItemIngredientModule } from './order-item-ingredient/order-item-ingredient.module';
 import { DeliveryAdressModule } from './delivery-adress/delivery-adress.module';
 import { OrderDetailsModule } from './order-details/order-details.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { NotFoundInterceptor } from './common/interceptors';
+import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOptionst), DishModule, IngredientModule, UserModule, OrderModule, OrderItemModule, OrderItemIngredientModule, DeliveryAdressModule, OrderDetailsModule],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOptionst),
+    DishModule,
+    IngredientModule,
+    UserModule,
+    OrderModule,
+    OrderItemModule,
+    OrderItemIngredientModule,
+    DeliveryAdressModule,
+    OrderDetailsModule,
+    AdminModule,
+    AuthModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: NotFoundInterceptor,
+    },
+  ],
 })
 export class AppModule {}

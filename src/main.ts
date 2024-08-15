@@ -26,7 +26,17 @@ async function bootstrap() {
     .setTitle('Pasta')
     .setDescription('base URL: ')
     .setVersion('1.0.1')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .addTag('Pasta')
     .build();
 
