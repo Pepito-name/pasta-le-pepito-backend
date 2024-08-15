@@ -1,7 +1,8 @@
 import { DishType } from 'src/common';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
 import { IDish } from '../../database/seeds/dish/dish-data';
+import { OrderItem } from 'src/order-item/entities/order-item.entity';
 
 @Entity()
 export class Dish {
@@ -38,6 +39,9 @@ export class Dish {
 
   @Column({ type: 'boolean', default: false })
   new: boolean;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.dish)
+  orderItems: OrderItem[];
 
   constructor(payload: CreateDishDto | IDish) {
     if (!payload) return;
