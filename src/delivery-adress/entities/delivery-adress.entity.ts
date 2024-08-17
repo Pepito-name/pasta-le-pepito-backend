@@ -1,5 +1,6 @@
 import { Order } from 'src/order/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateDeliveryAdressDto } from '../dto/create-delivery-adress.dto';
 
 @Entity()
 export class DeliveryAdress {
@@ -28,5 +29,17 @@ export class DeliveryAdress {
   intercomCode: string;
 
   @OneToMany(() => Order, (order) => order.deliveryAdress)
-  order: Order[];
+  orders: Order[];
+
+  constructor(payload: CreateDeliveryAdressDto) {
+    if (!payload) return;
+
+    this.buildingNumber = payload.buildingNumber;
+    this.city = payload.city;
+    this.entrance = payload.entrance;
+    this.flatNumber = payload.flatNumber;
+    this.floor = payload.floor;
+    this.intercomCode = payload.intercomCode;
+    this.street = payload.street;
+  }
 }

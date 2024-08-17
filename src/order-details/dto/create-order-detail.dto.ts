@@ -3,7 +3,7 @@ import { IsBoolean } from 'class-validator';
 import { PayType } from 'src/common';
 
 export class CreateOrderDetailDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   name: string;
 
   @ApiProperty()
@@ -12,15 +12,21 @@ export class CreateOrderDetailDto {
   @ApiPropertyOptional()
   email: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: PayType,
   })
   payType: PayType;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsBoolean()
   noChange: boolean;
 
   @ApiPropertyOptional()
   changeFrom?: number;
+
+  @ApiPropertyOptional()
+  date: string;
+
+  @ApiPropertyOptional()
+  comment: string;
 }

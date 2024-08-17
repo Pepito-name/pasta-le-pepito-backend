@@ -7,10 +7,16 @@ export class OrderItemIngredient {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemIngredients)
+  @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemIngredients, {
+    onDelete: 'CASCADE',
+  })
   orderItem: OrderItem;
 
-  @ManyToOne(() => Ingredient, (ingredient) => ingredient.orderItemIngredients)
+  @ManyToOne(
+    () => Ingredient,
+    (ingredient) => ingredient.orderItemIngredients,
+    { onDelete: 'CASCADE' },
+  )
   ingredient: Ingredient;
 
   @Column()

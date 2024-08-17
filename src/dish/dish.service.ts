@@ -17,8 +17,8 @@ export class DishService {
     return await this.dishRepository.save(newDish);
   }
 
-  findAll() {
-    return `This action returns all dish`;
+  async findAll() {
+    return await this.dishRepository.find();
   }
 
   findOne(id: number) {
