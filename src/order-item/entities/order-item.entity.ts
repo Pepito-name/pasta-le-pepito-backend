@@ -8,15 +8,23 @@ export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Order, (order) => order.orderItems)
+  @ManyToOne(() => Order, (order) => order.orderItems, {
+    onDelete: 'CASCADE',
+  })
   order: Order;
 
-  @ManyToOne(() => Dish, (dish) => dish.orderItems)
+  @ManyToOne(() => Dish, (dish) => dish.orderItems, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   dish: Dish;
 
   @OneToMany(
     () => OrderItemIngredient,
     (orderItemIngredient) => orderItemIngredient.orderItem,
+    {
+      eager: true,
+    },
   )
   orderItemIngredients: OrderItemIngredient[];
 }

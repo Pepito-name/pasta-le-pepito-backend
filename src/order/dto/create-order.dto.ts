@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsBoolean } from 'class-validator';
+import { IsArray, IsBoolean, IsObject } from 'class-validator';
 import { CreateDeliveryAdressDto } from 'src/delivery-adress/dto/create-delivery-adress.dto';
+import { CreateOrderDetailDto } from 'src/order-details/dto/create-order-detail.dto';
 import { CreateOrderItemDto } from 'src/order-item/dto/create-order-item.dto';
 
 export class CreateOrderDto {
@@ -10,9 +11,13 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsBoolean()
-  @ApiPropertyOptional()
-  pickup?: boolean;
+  pickup: boolean;
 
+  @IsObject()
   @ApiPropertyOptional({ type: CreateDeliveryAdressDto })
-  delivery: CreateDeliveryAdressDto;
+  deliveryDetails: CreateDeliveryAdressDto;
+
+  @IsObject()
+  @ApiProperty({ type: CreateOrderDetailDto })
+  orderDetails: CreateOrderDetailDto;
 }
