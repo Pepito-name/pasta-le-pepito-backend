@@ -38,12 +38,13 @@ export class OrderService {
       payload.items.map(async (item) => {
         const newOrderItem = new OrderItem();
 
-        const dish = await this.dishRepository.findOne({
+        const dish = await this.dishRepository.findOneOrFail({
           where: {
             id: item.dishId,
           },
           select: ['id', 'price'],
         });
+
         newOrderItem.dish = dish;
         newOrderItem.order = newOrder;
 
@@ -56,7 +57,7 @@ export class OrderService {
             item.ingridients.map(async (ingredientData) => {
               const newOrderItemIngredient = new OrderItemIngredient();
 
-              const ingredient = await this.ingredientRepository.findOne({
+              const ingredient = await this.ingredientRepository.findOneOrFail({
                 where: {
                   id: ingredientData.ingridientId,
                 },
@@ -87,11 +88,12 @@ export class OrderService {
 
     const newOrderDetail = new OrderDetail(payload.orderDetails);
     newOrderDetail.order = newOrder;
+
     await this.orderDetailRepository.save(newOrderDetail);
 
     await this.orderRepository.save(newOrder);
 
-    return await this.orderRepository.findOneBy({ id: newOrder.id });
+    return await this.orderRepository.findOneByOrFail({ id: newOrder.id });
   }
 
   findAll() {
