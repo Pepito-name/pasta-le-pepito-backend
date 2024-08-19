@@ -17,6 +17,7 @@ export class DishSeedService {
       await Promise.all(
         dish.map(async (d) => {
           const newDish = new Dish(d);
+          newDish.image = d.image;
           await this.dishRepository.save(newDish);
         }),
       );
