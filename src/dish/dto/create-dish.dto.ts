@@ -42,9 +42,9 @@ export class CreateDishDto {
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  hit: boolean;
+  isHit: boolean;
 
   @ApiProperty({ example: false })
   @IsBoolean()
-  new: boolean;
+  isNew: boolean;
 }

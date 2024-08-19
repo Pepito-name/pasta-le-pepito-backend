@@ -7,3 +7,8 @@ export enum DishType {
   Soup = 'Суп',
   Drink = 'Напій',
 }
+
+export enum DishStatus {
+  Hit = 'hit',
+  New = 'new',
+}

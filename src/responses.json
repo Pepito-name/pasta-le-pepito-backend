@@ -1,0 +1,12 @@
+{
+  "getHitsOrNewsDishes": {
+    "id": 10,
+    "title": "title",
+    "weight": 320,
+    "composition": "string",
+    "price": 329,
+    "image": "https://images.....",
+    "isHit": true,
+    "isNew": false
+  }
+}

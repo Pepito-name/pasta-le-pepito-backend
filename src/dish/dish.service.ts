@@ -4,6 +4,7 @@ import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DishStatus } from 'src/common';
 
 @Injectable()
 export class DishService {
@@ -17,8 +18,21 @@ export class DishService {
     return await this.dishRepository.save(newDish);
   }
 
-  async findAll() {
-    return await this.dishRepository.find();
+  async findAllNewsOrHits(status: DishStatus) {
+    const query = status === DishStatus.Hit ? { isHit: true } : { isNew: true };
+    return await this.dishRepository.find({
+      where: query,
+      select: [
+        'id',
+        'title',
+        'weight',
+        'composition',
+        'price',
+        'image',
+        'isHit',
+        'isNew',
+      ],
+    });
   }
 
   findOne(id: number) {

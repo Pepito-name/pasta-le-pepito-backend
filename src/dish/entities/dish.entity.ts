@@ -35,10 +35,10 @@ export class Dish {
   type: DishType;
 
   @Column({ type: 'boolean', default: false })
-  hit: boolean;
+  isHit: boolean;
 
   @Column({ type: 'boolean', default: false })
-  new: boolean;
+  isNew: boolean;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.dish)
   orderItems: OrderItem[];
@@ -52,7 +52,7 @@ export class Dish {
     this.composition = payload.composition;
     this.price = payload.price;
     this.type = payload.type;
-    this.hit = payload.hit;
-    this.new = payload.new;
+    this.isHit = payload.isHit;
+    this.isNew = payload.isNew;
   }
 }
