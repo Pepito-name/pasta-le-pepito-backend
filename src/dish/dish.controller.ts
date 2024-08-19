@@ -7,15 +7,12 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  Query,
-  ParseEnumPipe,
   HttpStatus,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DishStatus } from 'src/common';
 
 import { ApiCustomResponse } from 'src/common/decorators/swagger.decorator';
 
@@ -33,13 +30,10 @@ export class DishController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'get hits or news dishes; Query: "new" or "hit"' })
+  @ApiOperation({ summary: 'get hits and news' })
   @ApiCustomResponse(HttpStatus.OK, [responses.getHitsOrNewsDishes])
-  async findAllNewsOrHits(
-    @Query('status', new ParseEnumPipe(DishStatus)) status: DishStatus,
-  ) {
-    console.log('object :>> ', responses);
-    return this.dishService.findAllNewsOrHits(status);
+  async findAllNewsAndHits() {
+    return this.dishService.findAllNewsAndHits();
   }
 
   @Get(':id')
