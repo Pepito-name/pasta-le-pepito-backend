@@ -29,8 +29,8 @@ export class DishController {
     return this.dishService.create(createDishDto);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'get hits and news' })
+  @Get('/hits-and-news')
+  @ApiOperation({ summary: 'get hits and news (for rendering)' })
   @ApiCustomResponse(HttpStatus.OK, [responses.getHitsOrNewsDishes])
   async findAllNewsAndHits() {
     return this.dishService.findAllNewsAndHits();
