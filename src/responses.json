@@ -1,14 +1,40 @@
 {
   "getHitsAndNewsDishes": {
-    "id": 10,
-    "title": "title",
-    "weight": 320,
-    "composition": "string",
-    "price": 329,
-    "image": "https://images.....",
-    "isHit": true,
-    "isNew": false
+    "hits": [
+      {
+        "id": 10,
+        "title": "title",
+        "weight": 320,
+        "price": 329,
+        "image": "https://images.....",
+        "isHit": true,
+        "isNew": false
+      }
+    ],
+    "news": [
+      {
+        "id": 10,
+        "title": "title",
+        "weight": 320,
+        "composition": "string",
+        "price": 329,
+        "image": "https://images.....",
+        "isHit": true,
+        "isNew": false
+      }
+    ]
   },
-
+  "getAllDishes": [
+    {
+      "id": 10,
+      "title": "title",
+      "weight": 320,
+      "composition": "string",
+      "price": 329,
+      "image": "https://images.....",
+      "isHit": true,
+      "isNew": false
+    }
+  ],
   "getIngredients": { "id": 1, "name": "курка", "price": 88, "image": null }
 }
