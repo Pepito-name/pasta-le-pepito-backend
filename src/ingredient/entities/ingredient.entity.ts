@@ -14,6 +14,9 @@ export class Ingredient {
   @Column({ type: 'float' })
   price: number;
 
+  @Column({ nullable: true })
+  image: string | null;
+
   @OneToMany(
     () => OrderItemIngredient,
     (orderItemIngredient) => orderItemIngredient.ingredient,
