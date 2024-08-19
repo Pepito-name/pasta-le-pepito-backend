@@ -19,10 +19,10 @@ export class OrderItemIngredientController {
     private readonly orderItemIngredientService: OrderItemIngredientService,
   ) {}
 
-  @Post()
-  create(@Body() createOrderItemIngredientDto: CreateOrderItemIngredientDto) {
-    return this.orderItemIngredientService.create(createOrderItemIngredientDto);
-  }
+  // @Post()
+  // create(@Body() createOrderItemIngredientDto: CreateOrderItemIngredientDto) {
+  //   return this.orderItemIngredientService.create(createOrderItemIngredientDto);
+  // }
 
   @Get()
   findAll() {

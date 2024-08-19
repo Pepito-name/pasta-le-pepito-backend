@@ -10,6 +10,7 @@ import { OrderItemIngredient } from 'src/order-item-ingredient/entities/order-it
 import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 import { DeliveryAdress } from 'src/delivery-adress/entities/delivery-adress.entity';
 import { OrderDetail } from 'src/order-details/entities/order-delivery-detail.entity';
+import { OrderItemService } from 'src/order-item/order-item.service';
 
 @Injectable()
 export class OrderService {
@@ -28,56 +29,67 @@ export class OrderService {
     private deliveryAdressRepository: Repository<DeliveryAdress>,
     @InjectRepository(OrderItemIngredient)
     private orderItemIngredientRepository: Repository<OrderItemIngredient>,
+    private readonly orderItemService: OrderItemService,
   ) {}
 
   async create(payload: CreateOrderDto) {
     const newOrder = new Order();
     await this.orderRepository.save(newOrder);
 
-    await Promise.all(
-      payload.items.map(async (item) => {
-        const newOrderItem = new OrderItem();
+    // await Promise.all(
+    //   payload.items.map(async (item) => {
+    //     const newOrderItem = new OrderItem();
 
-        const dish = await this.dishRepository.findOneOrFail({
-          where: {
-            id: item.dishId,
-          },
-          select: ['id', 'price'],
-        });
+    //     const dish = await this.dishRepository.findOneOrFail({
+    //       where: {
+    //         id: item.dishId,
+    //       },
+    //       select: ['id', 'price'],
+    //     });
 
-        newOrderItem.dish = dish;
-        newOrderItem.order = newOrder;
+    //     newOrderItem.dish = dish;
+    //     newOrderItem.order = newOrder;
 
-        newOrder.totalPrice += dish.price;
+    //     newOrder.totalPrice += dish.price;
 
-        await this.orderItemRepository.save(newOrderItem);
+    //     await this.orderItemRepository.save(newOrderItem);
 
-        if (item.ingridients) {
-          await Promise.all(
-            item.ingridients.map(async (ingredientData) => {
-              const newOrderItemIngredient = new OrderItemIngredient();
+    //     if (item.ingridients) {
+    //       await Promise.all(
+    //         item.ingridients.map(async (ingredientData) => {
+    //           const newOrderItemIngredient = new OrderItemIngredient();
 
-              const ingredient = await this.ingredientRepository.findOneOrFail({
-                where: {
-                  id: ingredientData.ingridientId,
-                },
-                select: ['id', 'price'],
-              });
+    //           const ingredient = await this.ingredientRepository.findOneOrFail({
+    //             where: {
+    //               id: ingredientData.ingridientId,
+    //             },
+    //             select: ['id', 'price'],
+    //           });
 
-              newOrderItemIngredient.ingredient = ingredient;
-              newOrderItemIngredient.quantity = ingredientData.quanttity;
-              newOrderItemIngredient.orderItem = newOrderItem;
+    //           newOrderItemIngredient.ingredient = ingredient;
+    //           newOrderItemIngredient.quantity = ingredientData.quanttity;
+    //           newOrderItemIngredient.orderItem = newOrderItem;
 
-              newOrder.totalPrice +=
-                ingredient.price * ingredientData.quanttity;
+    //           newOrder.totalPrice +=
+    //             ingredient.price * ingredientData.quanttity;
 
-              await this.orderItemIngredientRepository.save(
-                newOrderItemIngredient,
-              );
-            }),
-          );
-        }
-      }),
+    //           await this.orderItemIngredientRepository.save(
+    //             newOrderItemIngredient,
+    //           );
+    //         }),
+    //       );
+    //     }
+    //   }),
+    // );
+
+    const totalPrice = await this.orderItemService.createOrderItems(
+      payload.items,
+      newOrder,
+    );
+
+    newOrder.totalPrice = totalPrice.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0,
     );
 
     if (payload.deliveryDetails) {

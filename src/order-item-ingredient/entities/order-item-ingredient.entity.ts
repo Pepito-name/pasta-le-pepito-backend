@@ -19,6 +19,6 @@ export class OrderItemIngredient {
   )
   ingredient: Ingredient;
 
-  @Column()
+  @Column({ nullable: true })
   quantity: number;
 }

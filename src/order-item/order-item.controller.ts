@@ -17,10 +17,10 @@ import { ApiTags } from '@nestjs/swagger';
 export class OrderItemController {
   constructor(private readonly orderItemService: OrderItemService) {}
 
-  @Post()
-  create(@Body() createOrderItemDto: CreateOrderItemDto) {
-    return this.orderItemService.create(createOrderItemDto);
-  }
+  // @Post()
+  // create(@Body() createOrderItemDto: CreateOrderItemDto) {
+  //   return this.orderItemService.create(createOrderItemDto);
+  // }
 
   @Get()
   findAll() {

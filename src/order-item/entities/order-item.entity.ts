@@ -14,7 +14,6 @@ export class OrderItem {
   order: Order;
 
   @ManyToOne(() => Dish, (dish) => dish.orderItems, {
-    onDelete: 'CASCADE',
     eager: true,
   })
   dish: Dish;
