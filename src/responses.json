@@ -1,5 +1,5 @@
 {
-  "getHitsOrNewsDishes": {
+  "getHitsAndNewsDishes": {
     "id": 10,
     "title": "title",
     "weight": 320,
@@ -8,5 +8,7 @@
     "image": "https://images.....",
     "isHit": true,
     "isNew": false
-  }
+  },
+
+  "getIngredients": { "id": 1, "name": "курка", "price": 88, "image": null }
 }

@@ -31,7 +31,7 @@ export class DishController {
 
   @Get('/hits-and-news')
   @ApiOperation({ summary: 'get hits and news (for rendering)' })
-  @ApiCustomResponse(HttpStatus.OK, [responses.getHitsOrNewsDishes])
+  @ApiCustomResponse(HttpStatus.OK, [responses.getHitsAndNewsDishes])
   async findAllNewsAndHits() {
     return this.dishService.findAllNewsAndHits();
   }
