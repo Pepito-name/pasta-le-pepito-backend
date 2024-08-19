@@ -15,7 +15,7 @@ export const ingredient: IIngredient[] = [
 
   { name: 'гострий соус', image: '', price: 50 },
 
-  { name: 'жвток', image: '', price: 40 },
+  { name: 'жовток', image: '', price: 40 },
 
   { name: 'овочі', image: '', price: 78 },
 
