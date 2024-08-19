@@ -49,10 +49,15 @@ export class DishService {
     return await this.dishRepository.findOneByOrFail({ id });
   }
 
-  async findByType(dto: FindDishByTypeDto) {
+  async findByType(dto: FindDishByTypeDto, limit: number, page: number) {
+    const queryOptions = { take: limit, skip: (page - 1) * limit };
+
     return dto.type
-      ? await this.dishRepository.find({ where: { type: dto.type } })
-      : await this.dishRepository.find();
+      ? await this.dishRepository.find({
+          where: { type: dto.type },
+          ...queryOptions,
+        })
+      : await this.dishRepository.find(queryOptions);
   }
 
   update(id: number, payload: UpdateDishDto) {
