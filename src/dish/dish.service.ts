@@ -48,6 +48,11 @@ export class DishService {
     return await this.dishRepository.findOneByOrFail({ id });
   }
 
+  async findOneByParams(id: number, selectParams: string[]) {
+    const params = { where: { id }, select: selectParams as (keyof Dish)[] };
+    return await this.dishRepository.findOneOrFail(params);
+  }
+
   async findByType(dto: FindDishByTypeDto, limit: number, page: number) {
     const queryOptions: any = {
       take: limit,

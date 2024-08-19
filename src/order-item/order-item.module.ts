@@ -7,6 +7,7 @@ import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item
 import { OrderItemIngredient } from 'src/order-item-ingredient/entities/order-item-ingredient.entity';
 import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 import { Dish } from 'src/dish/entities/dish.entity';
+import { DishService } from 'src/dish/dish.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { Dish } from 'src/dish/entities/dish.entity';
     ]),
   ],
   controllers: [OrderItemController],
-  providers: [OrderItemService, OrderItemIngredientService],
+  providers: [OrderItemService, OrderItemIngredientService, DishService],
 })
 export class OrderItemModule {}

@@ -17,7 +17,7 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: null })
   totalPrice: number;
 
   @Column({ default: false })
@@ -44,5 +44,7 @@ export class Order {
 
   constructor() {
     this.number = uuidv4().substring(0, 8);
+    this.totalPrice = 0;
+    this.pickup = false;
   }
 }

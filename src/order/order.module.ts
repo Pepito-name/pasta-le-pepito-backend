@@ -11,6 +11,7 @@ import { DeliveryAdress } from 'src/delivery-adress/entities/delivery-adress.ent
 import { OrderDetail } from 'src/order-details/entities/order-delivery-detail.entity';
 import { OrderItemService } from 'src/order-item/order-item.service';
 import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item-ingredient.service';
+import { DishService } from 'src/dish/dish.service';
 
 @Module({
   imports: [
@@ -25,6 +26,11 @@ import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService, OrderItemService, OrderItemIngredientService],
+  providers: [
+    OrderService,
+    OrderItemService,
+    OrderItemIngredientService,
+    DishService,
+  ],
 })
 export class OrderModule {}

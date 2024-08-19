@@ -7,6 +7,7 @@ import { OrderItem } from './entities/order-item.entity';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { Order } from 'src/order/entities/order.entity';
 import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item-ingredient.service';
+import { DishService } from 'src/dish/dish.service';
 
 @Injectable()
 export class OrderItemService {
@@ -16,15 +17,14 @@ export class OrderItemService {
     @InjectRepository(Dish)
     private dishRepository: Repository<Dish>,
     private readonly orderItemIngredientService: OrderItemIngredientService,
+    private readonly dishService: DishService,
   ) {}
 
-  async createOrderItems(payload: CreateOrderItemDto[], order: Order) {
+  async createOrderItems(payload: CreateOrderItemDto[]) {
     try {
       const data = await Promise.all(
         payload.map(async (p) => {
           const newOrderItem = new OrderItem();
-
-          await this.orderItemRepository.save(newOrderItem);
 
           const dish = await this.dishRepository.findOneOrFail({
             where: {
@@ -34,13 +34,13 @@ export class OrderItemService {
           });
 
           newOrderItem.dish = dish;
-          newOrderItem.order = order;
 
           let partPrice = 0;
 
           partPrice += dish.price;
 
-          await this.orderItemRepository.save(newOrderItem);
+          const savedOrderItem =
+            await this.orderItemRepository.save(newOrderItem);
 
           if (p.ingridients) {
             const price = await this.orderItemIngredientService.create(
@@ -51,7 +51,7 @@ export class OrderItemService {
             partPrice += price[0];
           }
 
-          return partPrice;
+          return { partPrice, savedOrderItem };
         }),
       );
       return data;
