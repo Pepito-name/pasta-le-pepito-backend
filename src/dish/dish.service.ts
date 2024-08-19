@@ -4,7 +4,6 @@ import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DishType } from 'src/common';
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 
 @Injectable()
@@ -50,14 +49,18 @@ export class DishService {
   }
 
   async findByType(dto: FindDishByTypeDto, limit: number, page: number) {
-    const queryOptions = { take: limit, skip: (page - 1) * limit };
+    const queryOptions: any = {
+      take: limit,
+      skip: (page - 1) * limit,
+      order: { price: 'DESC' },
+    };
 
-    return dto.type
-      ? await this.dishRepository.find({
-          where: { type: dto.type },
-          ...queryOptions,
-        })
-      : await this.dishRepository.find(queryOptions);
+    if (dto.type) {
+      queryOptions.where = { type: dto.type };
+    }
+
+    const response = await this.dishRepository.find(queryOptions);
+    return response;
   }
 
   update(id: number, payload: UpdateDishDto) {
