@@ -17,8 +17,26 @@ export class DishService {
     return await this.dishRepository.save(newDish);
   }
 
-  async findAll() {
-    return await this.dishRepository.find();
+  async findAllNewsAndHits() {
+    const data = await this.dishRepository.find({
+      where: [{ isHit: true }, { isNew: true }],
+      select: [
+        'id',
+        'title',
+        'weight',
+        'composition',
+        'price',
+        'image',
+        'isHit',
+        'isNew',
+      ],
+    });
+
+    const response = {
+      hits: data.filter((d) => d.isHit === true),
+      news: data.filter((d) => d.isNew === true),
+    };
+    return response;
   }
 
   findOne(id: number) {

@@ -8,8 +8,8 @@ export interface IDish {
   price: number;
   image: string | null;
   type?: DishType | null;
-  hit?: boolean | null;
-  new?: boolean | null;
+  isHit?: boolean | null;
+  isNew?: boolean | null;
 }
 
 export const dish: IDish[] = [
