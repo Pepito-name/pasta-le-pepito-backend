@@ -4,6 +4,8 @@ import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DishType } from 'src/common';
+import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 
 @Injectable()
 export class DishService {
@@ -18,8 +20,13 @@ export class DishService {
   }
 
   async findAllNewsAndHits() {
-    const data = await this.dishRepository.find({
-      where: [{ isHit: true }, { isNew: true }],
+    const hits = await this.dishRepository.find({
+      where: { isHit: true },
+      select: ['id', 'title', 'weight', 'price', 'image', 'isHit', 'isNew'],
+    });
+
+    const news = await this.dishRepository.find({
+      where: { isNew: true },
       select: [
         'id',
         'title',
@@ -32,15 +39,20 @@ export class DishService {
       ],
     });
 
-    const response = {
-      hits: data.filter((d) => d.isHit === true),
-      news: data.filter((d) => d.isNew === true),
+    return {
+      hits,
+      news,
     };
-    return response;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} dish`;
+  async findOne(id: number) {
+    return await this.dishRepository.findOneByOrFail({ id });
+  }
+
+  async findByType(dto: FindDishByTypeDto) {
+    return dto.type
+      ? await this.dishRepository.find({ where: { type: dto.type } })
+      : await this.dishRepository.find();
   }
 
   update(id: number, payload: UpdateDishDto) {

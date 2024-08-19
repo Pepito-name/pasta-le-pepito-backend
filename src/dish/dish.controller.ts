@@ -8,15 +8,17 @@ import {
   Delete,
   ParseIntPipe,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { ApiCustomResponse } from 'src/common/decorators/swagger.decorator';
-
 import responses from '../responses.json';
+
+import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
+import { ApiCustomResponse } from 'src/common';
 
 @Controller('dish')
 @ApiTags('dish')
@@ -29,7 +31,14 @@ export class DishController {
     return this.dishService.create(createDishDto);
   }
 
-  @Get('/hits-and-news')
+  @Get('by-type')
+  @ApiOperation({ summary: 'get dishes by type' })
+  @ApiCustomResponse(HttpStatus.OK, responses.getAllDishes)
+  async findByType(@Query() query: FindDishByTypeDto) {
+    return this.dishService.findByType(query);
+  }
+
+  @Get('hits-and-news')
   @ApiOperation({ summary: 'get hits and news (for rendering)' })
   @ApiCustomResponse(HttpStatus.OK, [responses.getHitsAndNewsDishes])
   async findAllNewsAndHits() {
@@ -37,7 +46,8 @@ export class DishController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseIntPipe()) id: number) {
+  @ApiOperation({ summary: 'get dish by id' })
+  async findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.dishService.findOne(id);
   }
 
