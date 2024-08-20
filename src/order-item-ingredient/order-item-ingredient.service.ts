@@ -4,16 +4,15 @@ import { UpdateOrderItemIngredientDto } from './dto/update-order-item-ingredient
 import { OrderItemIngredient } from './entities/order-item-ingredient.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
+import { IngredientService } from 'src/ingredient/ingredient.service';
 
 @Injectable()
 export class OrderItemIngredientService {
   constructor(
     @InjectRepository(OrderItemIngredient)
     private orderItemRepository: Repository<OrderItemIngredient>,
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
+    private readonly ingredientService: IngredientService,
   ) {}
   async create(payload: CreateOrderItemIngredientDto[], orderItem: OrderItem) {
     try {
@@ -22,14 +21,14 @@ export class OrderItemIngredientService {
           const newOrderItemIngredient = new OrderItemIngredient();
           await this.orderItemRepository.save(newOrderItemIngredient);
 
-          const ingredient = await this.ingredientRepository.findOneOrFail({
-            where: { id: i.ingridientId },
-            select: ['id', 'price'],
-          });
-
+          const ingredient = await this.ingredientService.findOneByParams(
+            i.ingridientId,
+            ['id', 'price'],
+          );
           newOrderItemIngredient.ingredient = ingredient;
           newOrderItemIngredient.quantity = i.quanttity;
           newOrderItemIngredient.orderItem = orderItem;
+
           await this.orderItemRepository.save(newOrderItemIngredient);
 
           let partPrice = 0;

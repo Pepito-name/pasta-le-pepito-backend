@@ -4,8 +4,6 @@ import { UpdateOrderItemDto } from './dto/update-order-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderItem } from './entities/order-item.entity';
-import { Dish } from 'src/dish/entities/dish.entity';
-import { Order } from 'src/order/entities/order.entity';
 import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item-ingredient.service';
 import { DishService } from 'src/dish/dish.service';
 
@@ -14,8 +12,6 @@ export class OrderItemService {
   constructor(
     @InjectRepository(OrderItem)
     private orderItemRepository: Repository<OrderItem>,
-    @InjectRepository(Dish)
-    private dishRepository: Repository<Dish>,
     private readonly orderItemIngredientService: OrderItemIngredientService,
     private readonly dishService: DishService,
   ) {}
@@ -26,21 +22,18 @@ export class OrderItemService {
         payload.map(async (p) => {
           const newOrderItem = new OrderItem();
 
-          const dish = await this.dishRepository.findOneOrFail({
-            where: {
-              id: p.dishId,
-            },
-            select: ['id', 'price'],
-          });
+          const savedOrderItem =
+            await this.orderItemRepository.save(newOrderItem);
 
-          newOrderItem.dish = dish;
+          const dish = await this.dishService.findOneAndSaveByParams(
+            savedOrderItem,
+            p.dishId,
+            ['id', 'price'],
+          );
 
           let partPrice = 0;
 
           partPrice += dish.price;
-
-          const savedOrderItem =
-            await this.orderItemRepository.save(newOrderItem);
 
           if (p.ingridients) {
             const price = await this.orderItemIngredientService.create(
@@ -54,6 +47,7 @@ export class OrderItemService {
           return { partPrice, savedOrderItem };
         }),
       );
+
       return data;
     } catch (error) {
       throw error;

@@ -1,5 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { CreateOrderItemIngredientDto } from 'src/order-item-ingredient/dto/create-order-item-ingredient.dto';
 
 export class CreateOrderItemDto {
@@ -7,8 +8,10 @@ export class CreateOrderItemDto {
   @IsNumber()
   dishId: number;
 
+  @ValidateNested()
+  @Type(() => CreateOrderItemIngredientDto)
   @ApiProperty({ type: [CreateOrderItemIngredientDto] })
   @IsArray()
-  @ApiPropertyOptional()
+  @IsOptional()
   ingridients?: CreateOrderItemIngredientDto[];
 }

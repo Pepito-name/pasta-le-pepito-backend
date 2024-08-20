@@ -1,12 +1,15 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 export class CreateOrderItemIngredientDto {
+  @ApiProperty()
+  @IsOptional()
   @IsNumber()
-  @ApiPropertyOptional()
   ingridientId?: number;
 
+  @ApiProperty()
+  @IsOptional()
   @IsNumber()
-  @ApiPropertyOptional()
+  @Min(1)
   quanttity?: number;
 }

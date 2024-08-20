@@ -1,5 +1,12 @@
 import { Order } from 'src/order/entities/order.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CreateDeliveryAdressDto } from '../dto/create-delivery-adress.dto';
 
 @Entity()
@@ -28,7 +35,10 @@ export class DeliveryAdress {
   @Column({ nullable: true, default: null })
   intercomCode: string;
 
-  @OneToMany(() => Order, (order) => order.deliveryAdress)
+  @OneToOne(() => Order, (order) => order.deliveryAdress, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'orderId' })
   orders: Order[];
 
   constructor(payload: CreateDeliveryAdressDto) {

@@ -12,11 +12,7 @@ export class OrderItemIngredient {
   })
   orderItem: OrderItem;
 
-  @ManyToOne(
-    () => Ingredient,
-    (ingredient) => ingredient.orderItemIngredients,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Ingredient, (ingredient) => ingredient.orderItemIngredients)
   ingredient: Ingredient;
 
   @Column({ nullable: true })

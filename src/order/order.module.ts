@@ -12,6 +12,9 @@ import { OrderDetail } from 'src/order-details/entities/order-delivery-detail.en
 import { OrderItemService } from 'src/order-item/order-item.service';
 import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item-ingredient.service';
 import { DishService } from 'src/dish/dish.service';
+import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.service';
+import { OrderDetailsService } from 'src/order-details/order-details.service';
+import { IngredientService } from 'src/ingredient/ingredient.service';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { DishService } from 'src/dish/dish.service';
     OrderItemService,
     OrderItemIngredientService,
     DishService,
+    DeliveryAdressService,
+    OrderDetailsService,
+    IngredientService,
   ],
 })
 export class OrderModule {}
