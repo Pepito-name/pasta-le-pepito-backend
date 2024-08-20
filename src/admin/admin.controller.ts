@@ -24,7 +24,6 @@ export class AdminController {
 
   @Get('me')
   async getMe(@User('id') userId: number) {
-    console.log('userId :>> ', userId);
     return this.adminService.getMe(userId);
   }
 

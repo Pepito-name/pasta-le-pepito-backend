@@ -5,6 +5,7 @@ import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
+import { OrderItem } from 'src/order-item/entities/order-item.entity';
 
 @Injectable()
 export class DishService {
@@ -46,6 +47,21 @@ export class DishService {
 
   async findOne(id: number) {
     return await this.dishRepository.findOneByOrFail({ id });
+  }
+
+  async findOneAndSaveByParams(
+    orderItem: OrderItem,
+    id: number,
+    selectParams: string[],
+  ) {
+    const params = {
+      where: { id },
+      select: selectParams as (keyof Dish)[],
+      relations: ['orderItems'],
+    };
+    const dish = await this.dishRepository.findOneOrFail(params);
+    dish.orderItems.push(orderItem);
+    return await this.dishRepository.save(dish);
   }
 
   async findByType(dto: FindDishByTypeDto, limit: number, page: number) {

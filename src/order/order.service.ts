@@ -4,96 +4,50 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
-import { OrderItem } from 'src/order-item/entities/order-item.entity';
-import { Dish } from 'src/dish/entities/dish.entity';
-import { OrderItemIngredient } from 'src/order-item-ingredient/entities/order-item-ingredient.entity';
-import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
-import { DeliveryAdress } from 'src/delivery-adress/entities/delivery-adress.entity';
-import { OrderDetail } from 'src/order-details/entities/order-delivery-detail.entity';
+import { OrderItemService } from 'src/order-item/order-item.service';
+import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.service';
+import { OrderDetailsService } from 'src/order-details/order-details.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
-    @InjectRepository(OrderDetail)
-    private orderDetailRepository: Repository<OrderDetail>,
-    @InjectRepository(OrderItem)
-    private orderItemRepository: Repository<OrderItem>,
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
-    @InjectRepository(Dish)
-    private dishRepository: Repository<Dish>,
-    @InjectRepository(DeliveryAdress)
-    private deliveryAdressRepository: Repository<DeliveryAdress>,
-    @InjectRepository(OrderItemIngredient)
-    private orderItemIngredientRepository: Repository<OrderItemIngredient>,
+    private readonly orderItemService: OrderItemService,
+    private readonly orderDetailsService: OrderDetailsService,
+    private readonly deliveryAdressService: DeliveryAdressService,
   ) {}
 
   async create(payload: CreateOrderDto) {
-    const newOrder = new Order();
-    await this.orderRepository.save(newOrder);
+    try {
+      const newOrder = new Order();
 
-    await Promise.all(
-      payload.items.map(async (item) => {
-        const newOrderItem = new OrderItem();
+      const data = await this.orderItemService.createOrderItems(payload.items);
 
-        const dish = await this.dishRepository.findOneOrFail({
-          where: {
-            id: item.dishId,
-          },
-          select: ['id', 'price'],
-        });
+      newOrder.orderItems = [...data.map((i) => i.savedOrderItem)];
+      newOrder.totalPrice += data
+        .map((i) => i.partPrice)
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-        newOrderItem.dish = dish;
-        newOrderItem.order = newOrder;
+      if (payload.deliveryDetails) {
+        const newDeliveryAdress = await this.deliveryAdressService.create(
+          payload.deliveryDetails,
+        );
+        newOrder.deliveryAdress = newDeliveryAdress;
+      }
 
-        newOrder.totalPrice += dish.price;
+      const newOrderDetail = await this.orderDetailsService.create(
+        payload.orderDetails,
+      );
+      newOrder.orderDetail = newOrderDetail;
 
-        await this.orderItemRepository.save(newOrderItem);
+      newOrder.pickup = payload.pickup;
+      await this.orderRepository.save(newOrder);
 
-        if (item.ingridients) {
-          await Promise.all(
-            item.ingridients.map(async (ingredientData) => {
-              const newOrderItemIngredient = new OrderItemIngredient();
-
-              const ingredient = await this.ingredientRepository.findOneOrFail({
-                where: {
-                  id: ingredientData.ingridientId,
-                },
-                select: ['id', 'price'],
-              });
-
-              newOrderItemIngredient.ingredient = ingredient;
-              newOrderItemIngredient.quantity = ingredientData.quanttity;
-              newOrderItemIngredient.orderItem = newOrderItem;
-
-              newOrder.totalPrice +=
-                ingredient.price * ingredientData.quanttity;
-
-              await this.orderItemIngredientRepository.save(
-                newOrderItemIngredient,
-              );
-            }),
-          );
-        }
-      }),
-    );
-
-    if (payload.deliveryDetails) {
-      const newDeliveryAdress = new DeliveryAdress(payload.deliveryDetails);
-      newDeliveryAdress.orders = [newOrder];
-      await this.deliveryAdressRepository.save(newDeliveryAdress);
+      return await this.orderRepository.findOneByOrFail({ id: newOrder.id });
+    } catch (error) {
+      throw error;
     }
-
-    const newOrderDetail = new OrderDetail(payload.orderDetails);
-    newOrderDetail.order = newOrder;
-
-    await this.orderDetailRepository.save(newOrderDetail);
-
-    await this.orderRepository.save(newOrder);
-
-    return await this.orderRepository.findOneByOrFail({ id: newOrder.id });
   }
 
   findAll() {

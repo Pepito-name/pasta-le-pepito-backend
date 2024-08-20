@@ -1,32 +1,38 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDeliveryAdressDto {
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   city: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   street: string;
 
   @ApiProperty()
   @IsNumber()
   buildingNumber: number;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
   @IsNumber()
-  entrance: number;
+  entrance?: number;
 
   @ApiPropertyOptional()
   @IsNumber()
-  flatNumber: number;
+  flatNumber?: number;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
   @IsNumber()
-  floor: number;
+  floor?: number;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
   @IsString()
-  intercomCode: string;
+  @IsNotEmpty()
+  intercomCode?: string;
 }

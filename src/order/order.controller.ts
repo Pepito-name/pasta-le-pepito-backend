@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
+import { ApiCustomResponse } from 'src/common';
+import responses from '../responses.json';
 
 @Controller('order')
 @ApiTags('order')
@@ -18,6 +22,8 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
+  @ApiOperation({ summary: 'create order' })
+  @ApiCustomResponse(HttpStatus.CREATED, responses.order)
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.orderService.create(createOrderDto);
   }

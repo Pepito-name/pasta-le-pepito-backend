@@ -1,10 +1,19 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsObject } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsObject,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { CreateDeliveryAdressDto } from 'src/delivery-adress/dto/create-delivery-adress.dto';
 import { CreateOrderDetailDto } from 'src/order-details/dto/create-order-detail.dto';
 import { CreateOrderItemDto } from 'src/order-item/dto/create-order-item.dto';
 
 export class CreateOrderDto {
+  @ValidateNested()
+  @Type(() => CreateOrderItemDto)
   @ApiProperty({ type: [CreateOrderItemDto] })
   @IsArray()
   items: CreateOrderItemDto[];
@@ -13,10 +22,15 @@ export class CreateOrderDto {
   @IsBoolean()
   pickup: boolean;
 
+  @ValidateNested()
+  @Type(() => CreateDeliveryAdressDto)
   @IsObject()
-  @ApiPropertyOptional({ type: CreateDeliveryAdressDto })
-  deliveryDetails: CreateDeliveryAdressDto;
+  @ApiProperty({ type: CreateDeliveryAdressDto })
+  @IsOptional()
+  deliveryDetails?: CreateDeliveryAdressDto;
 
+  @ValidateNested()
+  @Type(() => CreateOrderDetailDto)
   @IsObject()
   @ApiProperty({ type: CreateOrderDetailDto })
   orderDetails: CreateOrderDetailDto;

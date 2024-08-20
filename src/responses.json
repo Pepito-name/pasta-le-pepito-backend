@@ -36,5 +36,55 @@
       "isNew": false
     }
   ],
-  "getIngredients": { "id": 1, "name": "курка", "price": 88, "image": null }
+  "getIngredients": { "id": 1, "name": "курка", "price": 88, "image": null },
+  "order": {
+    "number": "710b1a62",
+    "totalPrice": 177,
+    "pickup": true,
+    "id": 137,
+    "orderItems": [
+      {
+        "id": 179,
+        "dish": {
+          "id": 1,
+          "title": "Pepsi zero",
+          "weight": null,
+          "volume": null,
+          "composition": null,
+          "price": 72,
+          "image": "https://images.....",
+          "type": "Напій",
+          "isHit": false,
+          "isNew": false
+        },
+        "orderItemIngredients": [
+          {
+            "id": 159,
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "deliveryAdress": {
+      "id": 110,
+      "city": "string",
+      "street": "string",
+      "buildingNumber": 0,
+      "entrance": 0,
+      "flatNumber": 0,
+      "floor": 0,
+      "intercomCode": "string"
+    },
+    "orderDetail": {
+      "id": 110,
+      "name": "string",
+      "phone": "string",
+      "email": "string",
+      "payType": "картою",
+      "noChange": true,
+      "changeFrom": 0,
+      "date": "string",
+      "comment": "string"
+    }
+  }
 }

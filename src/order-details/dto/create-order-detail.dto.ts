@@ -1,32 +1,53 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { PayType } from 'src/common';
 
 export class CreateOrderDetailDto {
-  @ApiPropertyOptional()
-  name: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  name?: string;
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   phone: string;
 
-  @ApiPropertyOptional()
-  email: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  email?: string;
 
-  @ApiPropertyOptional({
-    enum: PayType,
-  })
+  @ApiProperty({ example: PayType.Card })
+  @IsNotEmpty()
+  @IsEnum(PayType)
   payType: PayType;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
   @IsBoolean()
-  noChange: boolean;
+  noChange?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
   changeFrom?: number;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsString()
   date: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
   comment: string;
 }

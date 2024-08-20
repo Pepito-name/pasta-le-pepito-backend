@@ -5,6 +5,7 @@ import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -17,7 +18,7 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: null })
   totalPrice: number;
 
   @Column({ default: false })
@@ -34,15 +35,19 @@ export class Order {
   })
   orderItems: OrderItem[];
 
-  @ManyToOne(() => DeliveryAdress, (deliveryAdress) => deliveryAdress.orders, {
+  @OneToOne(() => DeliveryAdress, (deliveryAdress) => deliveryAdress.orders, {
     eager: true,
   })
   deliveryAdress: DeliveryAdress;
 
-  @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
+  @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order, {
+    eager: true,
+  })
   orderDetail: OrderDetail;
 
   constructor() {
     this.number = uuidv4().substring(0, 8);
+    this.totalPrice = 0;
+    this.pickup = false;
   }
 }

@@ -14,7 +14,7 @@ export class OrderDetail {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   name: string;
 
   @Column({ nullable: false })
@@ -39,8 +39,6 @@ export class OrderDetail {
   comment: string;
 
   @OneToOne(() => Order, (order) => order.orderDetail, {
-    eager: true,
-    cascade: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'orderId' })

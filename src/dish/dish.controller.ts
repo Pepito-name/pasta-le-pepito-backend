@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
@@ -24,6 +25,7 @@ import responses from '../responses.json';
 
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { ApiCustomResponse } from 'src/common';
+import { AdminAuthGuard } from 'src/auth';
 
 @Controller('dish')
 @ApiTags('dish')
@@ -32,6 +34,8 @@ export class DishController {
 
   @Post()
   @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'create dish by admin' })
   async create(@Body() createDishDto: CreateDishDto) {
     return this.dishService.create(createDishDto);
   }
