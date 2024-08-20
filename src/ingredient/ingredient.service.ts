@@ -20,8 +20,12 @@ export class IngredientService {
     return await this.ingredientRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ingredient`;
+  async findOneByParams(id: number, selectParams: string[]) {
+    const params = {
+      where: { id },
+      select: selectParams as (keyof Ingredient)[],
+    };
+    return await this.ingredientRepository.findOneOrFail(params);
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {

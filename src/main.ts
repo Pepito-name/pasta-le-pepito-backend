@@ -24,7 +24,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Pasta')
-    .setDescription('base URL: ')
+    .setDescription(
+      'base URL: https://pasta-le-pepito-backend.onrender.com/api/v1 ',
+    )
     .setVersion('1.0.1')
     .addBearerAuth(
       {

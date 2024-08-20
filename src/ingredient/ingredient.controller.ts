@@ -33,11 +33,6 @@ export class IngredientController {
     return this.ingredientService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ingredientService.findOne(+id);
-  }
-
   @Patch(':id')
   update(
     @Param('id') id: string,
