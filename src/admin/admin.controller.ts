@@ -25,6 +25,7 @@ import { CustomParseFilePipe, User } from 'src/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateDishDto } from 'src/dish/dto/create-dish.dto';
 import { DishService } from 'src/dish/dish.service';
+import { UpdateDishDto } from 'src/dish/dto/update-dish.dto';
 
 @Controller('admin')
 @ApiTags('admin')
@@ -54,15 +55,34 @@ export class AdminController {
     return this.adminService.remove(+id);
   }
 
-  @Post('/dish/create-dish')
-  @UseInterceptors(FileInterceptor('imagePath'))
+  @Post('/dish/create')
+  @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'create dish by admin' })
-  async create(
-    @Body() createDishDto: CreateDishDto,
+  async createDIsh(
+    @Body() payload: CreateDishDto,
     @UploadedFile(CustomParseFilePipe)
     image: Express.Multer.File,
   ) {
-    return this.dishService.create(createDishDto, image);
+    return this.dishService.createDish(payload, image);
+  }
+
+  @Patch('/dish/update/:dishId')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'update dish by admin' })
+  async updateDish(
+    @Param('dishId') dishId: number,
+    @Body() payload: UpdateDishDto,
+    @UploadedFile(CustomParseFilePipe)
+    image: Express.Multer.File,
+  ) {
+    return await this.dishService.updateDish(dishId, payload, image);
+  }
+
+  @Delete('/dish/delete/:dishId')
+  @ApiOperation({ summary: 'delete dish by admin' })
+  async deleteDish(@Param('dishId') dishId: number) {
+    return await this.dishService.deleteDishByAdmin(dishId);
   }
 }

@@ -330,7 +330,7 @@ export const dish: IDish[] = [
   {
     title: 'Чотири сири',
     weight: 380,
-    composition: '3 Дорблю, пармезан, брі, моцарелла, вершки',
+    composition: 'Дорблю, пармезан, брі, моцарелла, вершки',
     price: 350,
     image:
       'https://images.bolt.eu/store/2022/2022-03-29/065af4dd-260e-46bf-bcef-7b9220125e93.jpeg',

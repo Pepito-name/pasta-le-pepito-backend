@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -14,10 +15,12 @@ export class CreateDishDto {
   title: string;
 
   @ApiPropertyOptional({ example: 500 })
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber()
   weight: number;
 
   @ApiPropertyOptional({ example: 0.5 })
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber()
   volume: number;
 
@@ -26,6 +29,7 @@ export class CreateDishDto {
   composition: string;
 
   @ApiProperty({ example: 245 })
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber()
   price: number;
 
@@ -33,14 +37,17 @@ export class CreateDishDto {
   image: Express.Multer.File;
 
   @ApiProperty({ example: DishType.Pasta })
+  @IsOptional()
   @IsEnum(DishType)
   type: DishType;
 
   @ApiProperty({ example: true })
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   isHit: boolean;
 
   @ApiProperty({ example: false })
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   isNew: boolean;
 }
