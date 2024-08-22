@@ -6,17 +6,51 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { publicIdExtract } from 'src/common';
+import { id } from '../../node_modules/@nestjs/cli/node_modules/webpack/lib/optimize/ConcatenatedModule';
 
 @Injectable()
 export class DishService {
   constructor(
     @InjectRepository(Dish)
     private dishRepository: Repository<Dish>,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
-  async create(payload: CreateDishDto) {
+  async createDish(payload: CreateDishDto, image: Express.Multer.File) {
     const newDish = new Dish(payload);
+    const { secure_url } = await this.cloudinaryService.uploadFile(image);
+    newDish.image = secure_url;
     return await this.dishRepository.save(newDish);
+  }
+
+  async updateDish(
+    id: number,
+    payload: UpdateDishDto,
+    image: Express.Multer.File,
+  ) {
+    const dish = await this.dishRepository.findOneByOrFail({ id });
+    const { image: payImage, ...data } = payload;
+
+    if (image) {
+      const publicId = publicIdExtract(dish.image);
+      await this.cloudinaryService.deleteFile(publicId);
+      const { secure_url } = await this.cloudinaryService.uploadFile(image);
+      dish.image = secure_url;
+    }
+
+    const updatedDish = this.dishRepository.merge(dish, data);
+    await this.dishRepository.save(updatedDish);
+
+    return updatedDish;
+  }
+
+  async deleteDishByAdmin(id: number) {
+    const dish = await this.dishRepository.findOneByOrFail({ id });
+    const publicId = publicIdExtract(dish.image);
+    await this.cloudinaryService.deleteFile(publicId);
+    return await this.dishRepository.delete(dish);
   }
 
   async findAllNewsAndHits() {

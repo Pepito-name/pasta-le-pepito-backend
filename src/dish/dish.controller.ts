@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -9,36 +8,20 @@ import {
   ParseIntPipe,
   HttpStatus,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
-import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import responses from '../responses.json';
 
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { ApiCustomResponse } from 'src/common';
-import { AdminAuthGuard } from 'src/auth';
 
 @Controller('dish')
 @ApiTags('dish')
 export class DishController {
-  constructor(private readonly dishService: DishService) {}
-
-  @Post()
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(AdminAuthGuard)
-  @ApiOperation({ summary: 'create dish by admin' })
-  async create(@Body() createDishDto: CreateDishDto) {
-    return this.dishService.create(createDishDto);
-  }
+  constructor(readonly dishService: DishService) {}
 
   @Get('by-type')
   @ApiOperation({ summary: 'get dishes by type' })

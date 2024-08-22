@@ -15,6 +15,7 @@ import { DishService } from 'src/dish/dish.service';
 import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.service';
 import { OrderDetailsService } from 'src/order-details/order-details.service';
 import { IngredientService } from 'src/ingredient/ingredient.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { IngredientService } from 'src/ingredient/ingredient.service';
     DeliveryAdressService,
     OrderDetailsService,
     IngredientService,
+    CloudinaryService,
   ],
 })
 export class OrderModule {}
