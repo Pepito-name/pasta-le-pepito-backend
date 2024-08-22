@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
@@ -13,28 +13,24 @@ export class CreateDishDto {
   @IsString()
   title: string;
 
-  @ApiProperty({ example: 500 })
+  @ApiPropertyOptional({ example: 500 })
   @IsNumber()
-  @IsOptional()
-  weight?: number;
+  weight: number;
 
-  @ApiProperty({ example: 0.5 })
+  @ApiPropertyOptional({ example: 0.5 })
   @IsNumber()
-  @IsOptional()
-  volume?: number;
+  volume: number;
 
-  @ApiProperty({ example: 'text' })
+  @ApiPropertyOptional({ example: 'text' })
   @IsString()
-  @IsOptional()
   composition: string;
 
   @ApiProperty({ example: 245 })
   @IsNumber()
   price: number;
 
-  @ApiProperty({ example: 'https://image....' })
-  @IsString()
-  image: string;
+  @ApiProperty({ type: 'string', format: 'binary' })
+  image: Express.Multer.File;
 
   @ApiProperty({ example: DishType.Pasta })
   @IsEnum(DishType)

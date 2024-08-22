@@ -6,16 +6,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class DishService {
   constructor(
     @InjectRepository(Dish)
     private dishRepository: Repository<Dish>,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
-  async create(payload: CreateDishDto) {
+  async create(payload: CreateDishDto, image: Express.Multer.File) {
     const newDish = new Dish(payload);
+    const { secure_url } = await this.cloudinaryService.uploadFile(image);
+    newDish.image = secure_url;
     return await this.dishRepository.save(newDish);
   }
 
