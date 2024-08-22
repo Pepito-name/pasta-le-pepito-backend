@@ -9,6 +9,7 @@ import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { DishService } from 'src/dish/dish.service';
 import { IngredientService } from 'src/ingredient/ingredient.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { IngredientService } from 'src/ingredient/ingredient.service';
     OrderItemIngredientService,
     DishService,
     IngredientService,
+    CloudinaryService,
   ],
 })
 export class OrderItemModule {}
