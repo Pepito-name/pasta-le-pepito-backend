@@ -15,6 +15,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { NotFoundInterceptor } from './common/interceptors';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
     OrderDetailsModule,
     AdminModule,
     AuthModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [
