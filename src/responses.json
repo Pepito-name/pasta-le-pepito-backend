@@ -26,13 +26,15 @@
   },
   "getAllDishes": [
     {
-      "id": 10,
-      "title": "title",
-      "weight": 320,
-      "composition": "string",
-      "price": 329,
+      "id": 2,
+      "title": "Паста з морепродуктів",
+      "weight": 380,
+      "volume": null,
+      "composition": "Мідії, креветки, кальмар, соєвий соус, часник, овочі, вершки",
+      "price": 470,
       "image": "https://images.....",
-      "isHit": true,
+      "type": "Паста",
+      "isHit": false,
       "isNew": false
     }
   ],
