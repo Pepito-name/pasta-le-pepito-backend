@@ -7,14 +7,26 @@ import {
   Delete,
   ParseIntPipe,
   HttpStatus,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { UpdateDishDto } from './dto/update-dish.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import responses from '../responses.json';
 
-import { ApiCustomResponse } from 'src/common';
+import { ApiCustomResponse, CustomParseFilePipe } from 'src/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateDishDto } from './dto/create-dish.dto';
+import { AdminAuthGuard } from 'src/auth';
 
 @Controller('dish')
 @ApiTags('dish')
@@ -41,13 +53,40 @@ export class DishController {
     return this.dishService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDishDto: UpdateDishDto) {
-    return this.dishService.update(+id, updateDishDto);
+  @Post()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'create dish by admin' })
+  async createDIsh(
+    @Body() payload: CreateDishDto,
+    @UploadedFile(CustomParseFilePipe)
+    image: Express.Multer.File,
+  ) {
+    return this.dishService.createDish(payload, image);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dishService.remove(+id);
+  @Patch(':dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'update dish by admin' })
+  async updateDish(
+    @Param('dishId') dishId: number,
+    @Body() payload: UpdateDishDto,
+    @UploadedFile(CustomParseFilePipe)
+    image: Express.Multer.File,
+  ) {
+    return await this.dishService.updateDish(dishId, payload, image);
+  }
+
+  @Delete(':dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'delete dish by admin' })
+  async deleteDish(@Param('dishId') dishId: number) {
+    return await this.dishService.deleteDishByAdmin(dishId);
   }
 }
