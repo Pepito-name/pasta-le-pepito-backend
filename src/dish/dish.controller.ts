@@ -7,15 +7,13 @@ import {
   Delete,
   ParseIntPipe,
   HttpStatus,
-  Query,
 } from '@nestjs/common';
 import { DishService } from './dish.service';
 import { UpdateDishDto } from './dto/update-dish.dto';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import responses from '../responses.json';
 
-import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { ApiCustomResponse } from 'src/common';
 
 @Controller('dish')
@@ -23,17 +21,11 @@ import { ApiCustomResponse } from 'src/common';
 export class DishController {
   constructor(readonly dishService: DishService) {}
 
-  @Get('by-type')
-  @ApiOperation({ summary: 'get dishes by type' })
+  @Get()
+  @ApiOperation({ summary: 'get dishes for menu' })
   @ApiCustomResponse(HttpStatus.OK, responses.getAllDishes)
-  @ApiQuery({ name: 'limit', required: true, type: Number, example: 9 })
-  @ApiQuery({ name: 'page', required: true, type: Number, example: 1 })
-  async findByType(
-    @Query() query: FindDishByTypeDto,
-    @Query('limit', new ParseIntPipe()) limit = 9,
-    @Query('page', new ParseIntPipe()) page = 1,
-  ) {
-    return this.dishService.findByType(query, limit, page);
+  async getAll() {
+    return this.dishService.getAll();
   }
 
   @Get('hits-and-news')
