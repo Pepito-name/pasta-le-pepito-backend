@@ -8,7 +8,6 @@ import { FindDishByTypeDto } from './dto/find-dish-by-type.dto';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
-import { id } from '../../node_modules/@nestjs/cli/node_modules/webpack/lib/optimize/ConcatenatedModule';
 
 @Injectable()
 export class DishService {

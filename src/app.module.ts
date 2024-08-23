@@ -16,6 +16,7 @@ import { NotFoundInterceptor } from './common/interceptors';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { OurAdvantagesModule } from './our-advantages/our-advantages.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     AdminModule,
     AuthModule,
     CloudinaryModule,
+    OurAdvantagesModule,
   ],
   controllers: [AppController],
   providers: [
