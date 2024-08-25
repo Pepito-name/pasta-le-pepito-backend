@@ -4,30 +4,57 @@ import { UpdateOurAdvantageDto } from './dto/update-our-advantage.dto';
 import { OurAdvantage } from './entities/our-advantage.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { publicIdExtract } from 'src/common';
 
 @Injectable()
 export class OurAdvantagesService {
   constructor(
     @InjectRepository(OurAdvantage)
     private ourAdvantageRepository: Repository<OurAdvantage>,
+    readonly cloudinaryService: CloudinaryService,
   ) {}
-  create(payload: CreateOurAdvantageDto) {
-    return 'This action adds a new ourAdvantage';
+
+  async create(payload: CreateOurAdvantageDto, image: Express.Multer.File) {
+    const newAdv = new OurAdvantage(payload);
+    const { secure_url } = await this.cloudinaryService.uploadFile(image);
+    newAdv.image = secure_url;
+    return await this.ourAdvantageRepository.save(newAdv);
   }
 
   async findAll() {
     return await this.ourAdvantageRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ourAdvantage`;
+  async findOne(id: number) {
+    return await this.ourAdvantageRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, payload: UpdateOurAdvantageDto) {
-    return `This action updates a #${id} ourAdvantage`;
+  async update(
+    id: number,
+    payload: UpdateOurAdvantageDto,
+    image: Express.Multer.File,
+  ) {
+    const adv = await this.ourAdvantageRepository.findOneByOrFail({ id });
+    const { image: payImage, ...data } = payload;
+
+    if (image) {
+      const publicId = publicIdExtract(adv.image);
+      await this.cloudinaryService.deleteFile(publicId);
+      const { secure_url } = await this.cloudinaryService.uploadFile(image);
+      adv.image = secure_url;
+    }
+
+    const updatedAdv = this.ourAdvantageRepository.merge(adv, data);
+    await this.ourAdvantageRepository.save(updatedAdv);
+
+    return updatedAdv;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ourAdvantage`;
+  async remove(id: number) {
+    const adv = await this.ourAdvantageRepository.findOneByOrFail({ id });
+    const publicId = publicIdExtract(adv.image);
+    await this.cloudinaryService.deleteFile(publicId);
+    return await this.ourAdvantageRepository.delete(adv);
   }
 }
