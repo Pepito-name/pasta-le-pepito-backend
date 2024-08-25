@@ -7,6 +7,9 @@ export class OrderItemIngredient {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  quantity: number;
+
   @ManyToOne(() => OrderItem, (orderItem) => orderItem.orderItemIngredients, {
     onDelete: 'CASCADE',
   })
@@ -14,7 +17,4 @@ export class OrderItemIngredient {
 
   @ManyToOne(() => Ingredient, (ingredient) => ingredient.orderItemIngredients)
   ingredient: Ingredient;
-
-  @Column({ nullable: true })
-  quantity: number;
 }
