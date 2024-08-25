@@ -22,6 +22,26 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
+  app.enableCors({
+    origin: [
+      'https://pasta-la-pepito.vercel.app',
+      'http://localhost:3000',
+      'https://localhost:3000',
+    ],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'Authorization',
+      'X-Frame-Options',
+    ],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Pasta')
     .setDescription(
