@@ -23,12 +23,19 @@ export class OrderService {
       const newOrder = new Order();
 
       const data = await this.orderItemService.createOrderItems(payload.items);
+      let totalPrice: number = 0;
+
+      data.forEach((d) => {
+        totalPrice += d.savedOrderItem.dish.price;
+
+        if (d.savedOrderItem.orderItemIngredients) {
+          d.savedOrderItem.orderItemIngredients.forEach(
+            (i) => (totalPrice += i.ingredient.price * i.quantity),
+          );
+        }
+      });
 
       newOrder.orderItems = [...data.map((i) => i.savedOrderItem)];
-      newOrder.totalPrice += data
-        .map((i) => i.partPrice)
-        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
       if (payload.deliveryDetails) {
         const newDeliveryAdress = await this.deliveryAdressService.create(
           payload.deliveryDetails,
@@ -40,11 +47,10 @@ export class OrderService {
         payload.orderDetails,
       );
       newOrder.orderDetail = newOrderDetail;
-
+      newOrder.totalPrice = totalPrice;
       newOrder.pickup = payload.pickup;
-      await this.orderRepository.save(newOrder);
 
-      return await this.orderRepository.findOneByOrFail({ id: newOrder.id });
+      return await this.orderRepository.save(newOrder);
     } catch (error) {
       throw error;
     }

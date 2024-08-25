@@ -81,19 +81,13 @@ export class DishService {
     return await this.dishRepository.findOneByOrFail({ id });
   }
 
-  async findOneAndSaveByParams(
-    orderItem: OrderItem,
-    id: number,
-    selectParams: string[],
-  ) {
+  async findOneAndSaveByParams(id: number, selectParams: string[]) {
     const params = {
       where: { id },
       select: selectParams as (keyof Dish)[],
-      relations: ['orderItems'],
     };
-    const dish = await this.dishRepository.findOneOrFail(params);
-    dish.orderItems.push(orderItem);
-    return await this.dishRepository.save(dish);
+
+    return await this.dishRepository.findOneOrFail(params);
   }
 
   async getAll() {

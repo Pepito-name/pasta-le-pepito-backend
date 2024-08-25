@@ -14,28 +14,25 @@ export class OrderItemIngredientService {
     private orderItemRepository: Repository<OrderItemIngredient>,
     private readonly ingredientService: IngredientService,
   ) {}
-  async create(payload: CreateOrderItemIngredientDto[], orderItem: OrderItem) {
+  async create(payload: CreateOrderItemIngredientDto[]) {
     try {
       const data = await Promise.all(
         payload.map(async (i) => {
           const newOrderItemIngredient = new OrderItemIngredient();
-          await this.orderItemRepository.save(newOrderItemIngredient);
 
           const ingredient = await this.ingredientService.findOneByParams(
             i.ingridientId,
             ['id', 'price'],
           );
+
           newOrderItemIngredient.ingredient = ingredient;
           newOrderItemIngredient.quantity = i.quanttity;
-          newOrderItemIngredient.orderItem = orderItem;
 
-          await this.orderItemRepository.save(newOrderItemIngredient);
+          const savedOrderItemIngredient = await this.orderItemRepository.save(
+            newOrderItemIngredient,
+          );
 
-          let partPrice = 0;
-
-          partPrice += ingredient.price * i.quanttity;
-
-          return partPrice;
+          return savedOrderItemIngredient;
         }),
       );
 

@@ -22,29 +22,22 @@ export class OrderItemService {
         payload.map(async (p) => {
           const newOrderItem = new OrderItem();
 
+          const dish = await this.dishService.findOneAndSaveByParams(p.dishId, [
+            'id',
+            'price',
+          ]);
+
+          if (p.ingridients) {
+            newOrderItem.orderItemIngredients =
+              await this.orderItemIngredientService.create(p.ingridients);
+          }
+
+          newOrderItem.dish = dish;
+
           const savedOrderItem =
             await this.orderItemRepository.save(newOrderItem);
 
-          const dish = await this.dishService.findOneAndSaveByParams(
-            savedOrderItem,
-            p.dishId,
-            ['id', 'price'],
-          );
-
-          let partPrice = 0;
-
-          partPrice += dish.price;
-
-          if (p.ingridients) {
-            const price = await this.orderItemIngredientService.create(
-              p.ingridients,
-              newOrderItem,
-            );
-
-            partPrice += price[0];
-          }
-
-          return { partPrice, savedOrderItem };
+          return { savedOrderItem };
         }),
       );
 
