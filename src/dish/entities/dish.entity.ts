@@ -2,8 +2,10 @@ import { DishType } from 'src/common';
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
@@ -46,8 +48,7 @@ export class Dish {
   @Column({ type: 'boolean', default: false })
   isNew: boolean;
 
-  @ManyToMany(() => OrderItem, (orderItem) => orderItem.dish)
-  @JoinTable({ name: 'dish_to_orderItem' })
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.dish)
   orderItems: OrderItem[];
 
   constructor(payload: CreateDishDto | IDish) {

@@ -3,6 +3,7 @@ import { OrderItemIngredient } from 'src/order-item-ingredient/entities/order-it
 import { Order } from 'src/order/entities/order.entity';
 import {
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -18,9 +19,9 @@ export class OrderItem {
   @ManyToOne(() => Order, (order) => order.orderItems, { onDelete: 'CASCADE' })
   order: Order;
 
-  @ManyToMany(() => Dish, (dish) => dish.orderItems)
-  @JoinTable({ name: 'dish_to_orderItem' })
-  dish: Dish[];
+  @ManyToOne(() => Dish, (dish) => dish.orderItems)
+  @JoinColumn({ name: 'dishId' })
+  dish: Dish;
 
   @OneToMany(
     () => OrderItemIngredient,
