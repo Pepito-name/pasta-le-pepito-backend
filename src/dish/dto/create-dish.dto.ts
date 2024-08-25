@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -12,6 +13,7 @@ import { DishType } from 'src/common';
 export class CreateDishDto {
   @ApiProperty({ example: 'Різотто' })
   @IsString()
+  @IsNotEmpty()
   title: string;
 
   @ApiPropertyOptional({ example: 500 })
@@ -26,6 +28,7 @@ export class CreateDishDto {
 
   @ApiPropertyOptional({ example: 'text' })
   @IsString()
+  @IsNotEmpty()
   composition: string;
 
   @ApiProperty({ example: 245 })
