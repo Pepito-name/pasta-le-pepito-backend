@@ -8,6 +8,7 @@ import { Role } from 'src/common';
 import { LoginAdminDto } from './dto/login-admin.dto';
 
 import * as bcrypt from 'bcrypt';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Injectable()
 export class AdminService {
@@ -15,6 +16,18 @@ export class AdminService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  async create(payload: CreateAdminDto) {
+    const newAdmin = new User();
+    const { name, email, phone, role } = payload;
+    newAdmin.name = name;
+    newAdmin.email = email;
+    newAdmin.phone = phone;
+    newAdmin.role = role;
+    newAdmin.password = await bcrypt.hash(payload.password, 10);
+
+    return await this.userRepository.save(newAdmin);
+  }
 
   async adminlogin(payload: LoginAdminDto) {
     const admin = await this.userRepository.findOneByOrFail({
@@ -35,8 +48,12 @@ export class AdminService {
     return admin;
   }
 
-  update(id: number, payload: UpdateAdminDto) {
-    return `This action updates a #${id} admin`;
+  async update(id: number, payload: UpdateAdminDto) {
+    const admin = await this.userRepository.findOneByOrFail({
+      id,
+      role: Role.Admin,
+    });
+    return admin;
   }
 
   remove(id: number) {

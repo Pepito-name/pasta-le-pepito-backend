@@ -32,8 +32,10 @@ export class DishService {
     const { image: payImage, ...data } = payload;
 
     if (image) {
-      const publicId = publicIdExtract(dish.image);
-      await this.cloudinaryService.deleteFile(publicId);
+      if (dish.image) {
+        const publicId = publicIdExtract(dish.image);
+        await this.cloudinaryService.deleteFile(publicId);
+      }
       const { secure_url } = await this.cloudinaryService.uploadFile(image);
       dish.image = secure_url;
     }

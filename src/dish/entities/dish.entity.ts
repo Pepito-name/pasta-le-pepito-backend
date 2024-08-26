@@ -1,13 +1,5 @@
 import { DishType } from 'src/common';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
 import { IDish } from '../../database/seeds/dish/dish-data';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';

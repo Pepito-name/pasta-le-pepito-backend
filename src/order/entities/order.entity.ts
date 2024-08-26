@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { DeliveryAdress } from 'src/delivery-adress/entities/delivery-adress.entity';
 import { OrderDetail } from 'src/order-details/entities/order-delivery-detail.entity';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
@@ -5,7 +6,6 @@ import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -27,11 +27,15 @@ export class Order {
   @Column()
   number: string;
 
+  @Column({ type: 'boolean', default: false })
+  isPaid: boolean;
+
   @ManyToOne(() => User, (user) => user.orders, { nullable: true })
   user: User;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
     eager: true,
+    cascade: true,
   })
   orderItems: OrderItem[];
 
