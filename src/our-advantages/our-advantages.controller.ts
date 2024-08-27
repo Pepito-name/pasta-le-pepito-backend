@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { OurAdvantagesService } from './our-advantages.service';
 import { UpdateOurAdvantageDto } from './dto/update-our-advantage.dto';
@@ -37,6 +38,7 @@ export class OurAdvantagesController {
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'create advantage by admin' })
+  @ApiCustomResponse(HttpStatus.CREATED, response.ourAdvantages)
   async createAdvantage(
     @Body() payload: CreateOurAdvantageDto,
     @UploadedFile(CustomParseFilePipe)
@@ -57,7 +59,7 @@ export class OurAdvantagesController {
   @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'get one advantage by admin' })
   @ApiCustomResponse(HttpStatus.OK, response.ourAdvantages)
-  async findOne(@Param('id') id: number) {
+  async findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.ourAdvantagesService.findOne(id);
   }
 
@@ -68,7 +70,7 @@ export class OurAdvantagesController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'update advantage by admin' })
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() updateOurAdvantageDto: UpdateOurAdvantageDto,
     @UploadedFile(CustomParseFilePipe)
     image: Express.Multer.File,

@@ -4,7 +4,6 @@ import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { OrderItem } from 'src/order-item/entities/order-item.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
 
@@ -32,8 +31,10 @@ export class DishService {
     const { image: payImage, ...data } = payload;
 
     if (image) {
-      const publicId = publicIdExtract(dish.image);
-      await this.cloudinaryService.deleteFile(publicId);
+      if (dish.image) {
+        const publicId = publicIdExtract(dish.image);
+        await this.cloudinaryService.deleteFile(publicId);
+      }
       const { secure_url } = await this.cloudinaryService.uploadFile(image);
       dish.image = secure_url;
     }

@@ -36,6 +36,7 @@ export class OurAdvantagesService {
     image: Express.Multer.File,
   ) {
     const adv = await this.ourAdvantageRepository.findOneByOrFail({ id });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image: payImage, ...data } = payload;
 
     if (image) {

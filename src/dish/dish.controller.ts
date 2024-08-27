@@ -74,7 +74,7 @@ export class DishController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'update dish by admin' })
   async updateDish(
-    @Param('dishId') dishId: number,
+    @Param('dishId', new ParseIntPipe()) dishId: number,
     @Body() payload: UpdateDishDto,
     @UploadedFile(CustomParseFilePipe)
     image: Express.Multer.File,

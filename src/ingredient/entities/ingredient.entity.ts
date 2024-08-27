@@ -17,6 +17,9 @@ export class Ingredient {
   @Column({ nullable: true })
   image: string | null;
 
+  @Column({ nullable: false })
+  weight: number;
+
   @OneToMany(
     () => OrderItemIngredient,
     (orderItemIngredient) => orderItemIngredient.ingredient,
@@ -28,5 +31,6 @@ export class Ingredient {
 
     this.name = payload.name;
     this.price = payload.price;
+    this.weight = payload.weight;
   }
 }
