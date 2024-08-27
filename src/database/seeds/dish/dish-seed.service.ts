@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { Repository } from 'typeorm';
 import { dish } from './dish-data';
+import slug from 'slug';
 
 @Injectable()
 export class DishSeedService {
@@ -17,6 +18,7 @@ export class DishSeedService {
       await Promise.all(
         dish.map(async (d) => {
           const newDish = new Dish(d);
+          newDish.slug = slug(d.title, { lower: true });
           newDish.image = d.image;
           await this.dishRepository.save(newDish);
         }),
