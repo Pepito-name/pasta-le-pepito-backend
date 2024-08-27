@@ -55,21 +55,21 @@ export class DishService {
   async findAllNewsAndHits() {
     const hits = await this.dishRepository.find({
       where: { isHit: true },
-      select: ['id', 'title', 'weight', 'price', 'image', 'isHit', 'isNew'],
-    });
-
-    const news = await this.dishRepository.find({
-      where: { isNew: true },
       select: [
         'id',
         'title',
         'weight',
-        'composition',
         'price',
+        'composition',
         'image',
         'isHit',
         'isNew',
       ],
+    });
+
+    const news = await this.dishRepository.find({
+      where: { isNew: true },
+      select: ['id', 'title', 'weight', 'price', 'image', 'isHit', 'isNew'],
     });
 
     return {
