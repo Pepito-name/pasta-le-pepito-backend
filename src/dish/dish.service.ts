@@ -64,12 +64,22 @@ export class DishService {
         'image',
         'isHit',
         'isNew',
+        'slug',
       ],
     });
 
     const news = await this.dishRepository.find({
       where: { isNew: true },
-      select: ['id', 'title', 'weight', 'price', 'image', 'isHit', 'isNew'],
+      select: [
+        'id',
+        'title',
+        'weight',
+        'price',
+        'image',
+        'isHit',
+        'isNew',
+        'slug',
+      ],
     });
 
     return {

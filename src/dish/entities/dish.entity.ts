@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
 import { IDish } from '../../database/seeds/dish/dish-data';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
+import slug from 'slug';
 
 @Entity()
 export class Dish {
@@ -11,6 +12,9 @@ export class Dish {
 
   @Column()
   title: string;
+
+  @Column()
+  slug: string;
 
   @Column({ nullable: true })
   weight: number;
@@ -54,5 +58,6 @@ export class Dish {
     this.type = payload.type;
     this.isHit = payload.isHit;
     this.isNew = payload.isNew;
+    this.slug = slug(payload.title, { lower: true });
   }
 }
