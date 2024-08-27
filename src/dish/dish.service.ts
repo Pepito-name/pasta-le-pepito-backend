@@ -88,8 +88,8 @@ export class DishService {
     };
   }
 
-  async findOne(id: number) {
-    return await this.dishRepository.findOneByOrFail({ id });
+  async findOne(slug: string) {
+    return await this.dishRepository.findOneByOrFail({ slug });
   }
 
   async findOneAndSaveByParams(id: number, selectParams: string[]) {

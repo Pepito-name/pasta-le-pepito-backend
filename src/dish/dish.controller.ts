@@ -47,10 +47,10 @@ export class DishController {
     return this.dishService.findAllNewsAndHits();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'get dish by id' })
-  async findOne(@Param('id', new ParseIntPipe()) id: number) {
-    return this.dishService.findOne(id);
+  @Get(':slug')
+  @ApiOperation({ summary: 'get dish by slug' })
+  findOne(@Param('slug') slug: string) {
+    return this.dishService.findOne(slug);
   }
 
   @Post()
