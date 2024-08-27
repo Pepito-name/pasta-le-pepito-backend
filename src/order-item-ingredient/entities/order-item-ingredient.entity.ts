@@ -15,6 +15,13 @@ export class OrderItemIngredient {
   })
   orderItem: OrderItem;
 
-  @ManyToOne(() => Ingredient, (ingredient) => ingredient.orderItemIngredients)
+  @ManyToOne(
+    () => Ingredient,
+    (ingredient) => ingredient.orderItemIngredients,
+    {
+      onDelete: 'SET NULL',
+      nullable: true,
+    },
+  )
   ingredient: Ingredient;
 }

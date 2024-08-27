@@ -9,6 +9,11 @@ export class CreateIngredientDto {
   name: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  weight: number;
+
+  @ApiProperty()
   @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @Min(1)
