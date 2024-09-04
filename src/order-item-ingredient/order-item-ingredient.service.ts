@@ -3,8 +3,7 @@ import { CreateOrderItemIngredientDto } from './dto/create-order-item-ingredient
 import { UpdateOrderItemIngredientDto } from './dto/update-order-item-ingredient.dto';
 import { OrderItemIngredient } from './entities/order-item-ingredient.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { OrderItem } from 'src/order-item/entities/order-item.entity';
+import { Repository, EntityManager } from 'typeorm';
 import { IngredientService } from 'src/ingredient/ingredient.service';
 
 @Injectable()
@@ -14,7 +13,11 @@ export class OrderItemIngredientService {
     private orderItemRepository: Repository<OrderItemIngredient>,
     private readonly ingredientService: IngredientService,
   ) {}
-  async create(payload: CreateOrderItemIngredientDto[]) {
+
+  async create(
+    payload: CreateOrderItemIngredientDto[],
+    manager: EntityManager,
+  ) {
     try {
       const data = await Promise.all(
         payload.map(async (i) => {
@@ -28,7 +31,7 @@ export class OrderItemIngredientService {
           newOrderItemIngredient.ingredient = ingredient;
           newOrderItemIngredient.quantity = i.quanttity;
 
-          const savedOrderItemIngredient = await this.orderItemRepository.save(
+          const savedOrderItemIngredient = await manager.save(
             newOrderItemIngredient,
           );
 
@@ -50,10 +53,7 @@ export class OrderItemIngredientService {
     return `This action returns a #${id} orderItemIngredient`;
   }
 
-  update(
-    id: number,
-    updateOrderItemIngredientDto: UpdateOrderItemIngredientDto,
-  ) {
+  update(id: number, payload: UpdateOrderItemIngredientDto) {
     return `This action updates a #${id} orderItemIngredient`;
   }
 

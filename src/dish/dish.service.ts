@@ -28,6 +28,7 @@ export class DishService {
     image: Express.Multer.File,
   ) {
     const dish = await this.dishRepository.findOneByOrFail({ id });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image: payImage, ...data } = payload;
 
     if (image) {
@@ -54,7 +55,8 @@ export class DishService {
 
   async findAllNewsAndHits() {
     const hits = await this.dishRepository.find({
-      where: { isHit: true },
+      order: { orderCount: 'DESC' },
+      take: 5,
     });
 
     const news = await this.dishRepository.find({
@@ -69,6 +71,10 @@ export class DishService {
 
   async findOne(slug: string) {
     return await this.dishRepository.findOneByOrFail({ slug });
+  }
+
+  async findOneById(id: number) {
+    return await this.dishRepository.findOneByOrFail({ id });
   }
 
   async findOneAndSaveByParams(id: number, selectParams: string[]) {

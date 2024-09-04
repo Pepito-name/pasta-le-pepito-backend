@@ -20,6 +20,8 @@ export class DishSeedService {
           const newDish = new Dish(d);
           newDish.slug = slug(d.title, { lower: true });
           newDish.image = d.image;
+          newDish.orderCount = Math.floor(Math.random() * 101);
+          newDish.customizable = d.customizable;
           await this.dishRepository.save(newDish);
         }),
       );

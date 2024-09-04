@@ -82,6 +82,14 @@ export class DishController {
     return await this.dishService.updateDish(dishId, payload, image);
   }
 
+  @Get(':dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'find dish by admin' })
+  async findOneById(@Param('dishId') dishId: number) {
+    return await this.dishService.findOneById(dishId);
+  }
+
   @Delete(':dishId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminAuthGuard)

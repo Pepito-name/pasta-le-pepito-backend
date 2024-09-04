@@ -8,8 +8,8 @@ export interface IDish {
   price: number;
   image: string | null;
   type?: DishType | null;
-  isHit?: boolean | null;
   isNew?: boolean | null;
+  customizable?: boolean;
 }
 
 export const dish: IDish[] = [
@@ -19,6 +19,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2024/2024-04-07/c128ea29-2204-4644-bf60-b2f4b8a05c3d.webp',
     type: DishType.Drink,
+    customizable: false,
   },
 
   {
@@ -49,6 +50,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2023/2023-02-16/1a4c621b-ee06-4c79-9ea3-8181077de4b5.jpeg',
     type: DishType.Drink,
+    customizable: false,
   },
 
   {
@@ -59,6 +61,7 @@ export const dish: IDish[] = [
     price: 220,
     image: null,
     type: DishType.Soup,
+    customizable: false,
   },
 
   {
@@ -110,6 +113,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2024/2024-05-30/31924a9d-ec6c-43a3-bc73-887bb4c839d7.jpeg',
     type: DishType.Soup,
+    customizable: false,
   },
 
   {
@@ -138,6 +142,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2023/2023-02-16/a6a6581a-f111-4009-bc8e-d3d351a204d7.jpeg',
     type: DishType.Drink,
+    customizable: false,
   },
 
   {
@@ -243,6 +248,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2023/2023-10-20/18d8afa8-91a3-4ffe-b38e-74428281efb0.jpeg',
     type: DishType.Soup,
+    customizable: false,
   },
 
   {
@@ -263,6 +269,7 @@ export const dish: IDish[] = [
     image:
       'https://images.bolt.eu/store/2022/2022-03-29/9004e66e-2007-434a-9288-9a930c5b98fb.jpeg',
     type: DishType.Soup,
+    customizable: false,
   },
 
   {

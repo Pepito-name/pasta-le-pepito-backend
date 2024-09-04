@@ -4,8 +4,6 @@ import { Order } from 'src/order/entities/order.entity';
 import {
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
