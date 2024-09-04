@@ -44,13 +44,13 @@ export class CreateDishDto {
   @IsEnum(DishType)
   type: DishType;
 
-  @ApiProperty({ example: true })
-  @Transform(({ value }) => value === 'true' || value === true)
-  @IsBoolean()
-  isHit: boolean;
-
   @ApiProperty({ example: false })
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   isNew: boolean;
+
+  @ApiProperty({ example: false })
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  customizable: boolean;
 }

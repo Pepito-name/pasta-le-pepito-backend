@@ -38,13 +38,18 @@ export class Dish {
   })
   type: DishType;
 
-  @Column({ type: 'boolean', default: false })
-  isHit: boolean;
+  @Column({ type: 'integer', default: 0 })
+  orderCount: number;
 
   @Column({ type: 'boolean', default: false })
   isNew: boolean;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.dish)
+  @Column({ type: 'boolean', default: true })
+  customizable: boolean;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.dish, {
+    onDelete: 'SET NULL',
+  })
   orderItems: OrderItem[];
 
   constructor(payload: CreateDishDto | IDish) {
@@ -56,8 +61,10 @@ export class Dish {
     this.composition = payload.composition;
     this.price = payload.price;
     this.type = payload.type;
-    this.isHit = payload.isHit;
     this.isNew = payload.isNew;
     this.slug = slug(payload.title, { lower: true });
+    if (payload.customizable) {
+      this.customizable = payload.customizable;
+    }
   }
 }

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
 
@@ -28,6 +28,7 @@ export class DishService {
     image: Express.Multer.File,
   ) {
     const dish = await this.dishRepository.findOneByOrFail({ id });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image: payImage, ...data } = payload;
 
     if (image) {
@@ -52,9 +53,31 @@ export class DishService {
     return await this.dishRepository.delete(dish);
   }
 
+  async deleteDishesByAdmin(ids: number[]) {
+    const dishes = await this.dishRepository.find({
+      where: { id: In(ids) },
+      select: ['image'],
+    });
+
+    if (ids.length !== dishes.length) {
+      throw new NotFoundException('Some dishes not found');
+    }
+
+    await Promise.all(
+      dishes.map(async (d) => {
+        if (d.image) {
+          const publicId = publicIdExtract(d.image);
+          await this.cloudinaryService.deleteFile(publicId);
+        }
+      }),
+    );
+    await this.dishRepository.delete({ id: In(ids) });
+  }
+
   async findAllNewsAndHits() {
     const hits = await this.dishRepository.find({
-      where: { isHit: true },
+      order: { orderCount: 'DESC' },
+      take: 5,
     });
 
     const news = await this.dishRepository.find({
@@ -69,6 +92,10 @@ export class DishService {
 
   async findOne(slug: string) {
     return await this.dishRepository.findOneByOrFail({ slug });
+  }
+
+  async findOneById(id: number) {
+    return await this.dishRepository.findOneByOrFail({ id });
   }
 
   async findOneAndSaveByParams(id: number, selectParams: string[]) {

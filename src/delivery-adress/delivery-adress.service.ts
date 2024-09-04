@@ -3,7 +3,7 @@ import { CreateDeliveryAdressDto } from './dto/create-delivery-adress.dto';
 import { UpdateDeliveryAdressDto } from './dto/update-delivery-adress.dto';
 import { DeliveryAdress } from './entities/delivery-adress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, EntityManager } from 'typeorm';
 
 @Injectable()
 export class DeliveryAdressService {
@@ -12,9 +12,9 @@ export class DeliveryAdressService {
     private deliveryAdressRepository: Repository<DeliveryAdress>,
   ) {}
 
-  async create(payload: CreateDeliveryAdressDto) {
+  async create(payload: CreateDeliveryAdressDto, manager: EntityManager) {
     const newDeliveryAdress = new DeliveryAdress(payload);
-    return await this.deliveryAdressRepository.save(newDeliveryAdress);
+    return await manager.save(newDeliveryAdress);
   }
 
   findAll() {

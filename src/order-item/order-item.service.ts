@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { UpdateOrderItemDto } from './dto/update-order-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { OrderItem } from './entities/order-item.entity';
 import { OrderItemIngredientService } from 'src/order-item-ingredient/order-item-ingredient.service';
 import { DishService } from 'src/dish/dish.service';
@@ -16,7 +16,10 @@ export class OrderItemService {
     private readonly dishService: DishService,
   ) {}
 
-  async createOrderItems(payload: CreateOrderItemDto[]) {
+  async createOrderItems(
+    payload: CreateOrderItemDto[],
+    manager: EntityManager,
+  ) {
     try {
       const data = await Promise.all(
         payload.map(async (p) => {
@@ -29,13 +32,15 @@ export class OrderItemService {
 
           if (p.ingridients) {
             newOrderItem.orderItemIngredients =
-              await this.orderItemIngredientService.create(p.ingridients);
+              await this.orderItemIngredientService.create(
+                p.ingridients,
+                manager,
+              );
           }
 
           newOrderItem.dish = dish;
 
-          const savedOrderItem =
-            await this.orderItemRepository.save(newOrderItem);
+          const savedOrderItem = await manager.save(newOrderItem);
 
           return { savedOrderItem };
         }),

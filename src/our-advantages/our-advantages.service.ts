@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOurAdvantageDto } from './dto/create-our-advantage.dto';
 import { UpdateOurAdvantageDto } from './dto/update-our-advantage.dto';
 import { OurAdvantage } from './entities/our-advantage.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
 
@@ -57,5 +57,26 @@ export class OurAdvantagesService {
     const publicId = publicIdExtract(adv.image);
     await this.cloudinaryService.deleteFile(publicId);
     return await this.ourAdvantageRepository.delete(adv);
+  }
+
+  async deleteAdvantagesByAdmin(ids: number[]) {
+    const advantages = await this.ourAdvantageRepository.find({
+      where: { id: In(ids) },
+      select: ['image'],
+    });
+
+    if (ids.length !== advantages.length) {
+      throw new NotFoundException('Some advantages not found');
+    }
+
+    await Promise.all(
+      advantages.map(async (a) => {
+        if (a.image) {
+          const publicId = publicIdExtract(a.image);
+          await this.cloudinaryService.deleteFile(publicId);
+        }
+      }),
+    );
+    await this.ourAdvantageRepository.delete({ id: In(ids) });
   }
 }

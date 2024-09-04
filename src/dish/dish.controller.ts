@@ -27,6 +27,7 @@ import { ApiCustomResponse, CustomParseFilePipe } from 'src/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { AdminAuthGuard } from 'src/auth';
+import { DeleteSomeEntitiesDto } from '../common/dto/delete-some-entities.dto';
 
 @Controller('dish')
 @ApiTags('dish')
@@ -82,11 +83,27 @@ export class DishController {
     return await this.dishService.updateDish(dishId, payload, image);
   }
 
+  @Get(':dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'find dish by admin' })
+  async findOneById(@Param('dishId') dishId: number) {
+    return await this.dishService.findOneById(dishId);
+  }
+
   @Delete(':dishId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'delete dish by admin' })
   async deleteDish(@Param('dishId') dishId: number) {
     return await this.dishService.deleteDishByAdmin(dishId);
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'delete some dishes by admin' })
+  async deleteDishesByAdmin(@Body() payload: DeleteSomeEntitiesDto) {
+    return await this.dishService.deleteDishesByAdmin(payload.ids);
   }
 }

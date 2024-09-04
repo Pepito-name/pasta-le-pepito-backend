@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderDetailDto } from './dto/create-order-detail.dto';
 import { UpdateOrderDetailDto } from './dto/update-order-detail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, EntityManager } from 'typeorm';
 import { OrderDetail } from './entities/order-delivery-detail.entity';
 
 @Injectable()
@@ -12,9 +12,9 @@ export class OrderDetailsService {
     private orderDetailRepository: Repository<OrderDetail>,
   ) {}
 
-  async create(payload: CreateOrderDetailDto) {
+  async create(payload: CreateOrderDetailDto, manager: EntityManager) {
     const newOrderDetail = new OrderDetail(payload);
-    return await this.orderDetailRepository.save(newOrderDetail);
+    return await manager.save(newOrderDetail);
   }
 
   findAll() {

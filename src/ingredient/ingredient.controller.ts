@@ -29,6 +29,7 @@ import { AdminAuthGuard } from 'src/auth';
 import { CustomParseFilePipe } from 'src/common';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import response from '../responses.json';
+import { DeleteSomeEntitiesDto } from 'src/common/dto/delete-some-entities.dto';
 
 @Controller('ingredient')
 @ApiTags('ingredient')
@@ -91,5 +92,13 @@ export class IngredientController {
   @ApiOperation({ summary: 'delete ingredient by admin' })
   remove(@Param('id') id: number) {
     return this.ingredientService.remove(id);
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'delete some ingredients by admin' })
+  async deleteDishesByAdmin(@Body() payload: DeleteSomeEntitiesDto) {
+    return await this.ingredientService.deleteIngredientsByAdmin(payload.ids);
   }
 }
