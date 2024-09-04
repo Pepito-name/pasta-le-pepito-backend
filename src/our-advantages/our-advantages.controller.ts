@@ -26,6 +26,7 @@ import response from '../responses.json';
 import { CreateOurAdvantageDto } from './dto/create-our-advantage.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminAuthGuard } from 'src/auth';
+import { DeleteSomeEntitiesDto } from 'src/common/dto/delete-some-entities.dto';
 
 @Controller('our-advantages')
 @ApiTags('ourAdvantages')
@@ -84,5 +85,13 @@ export class OurAdvantagesController {
   @ApiOperation({ summary: 'delete advantage by admin' })
   async remove(@Param('id') id: number) {
     return this.ourAdvantagesService.remove(id);
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'delete advantages by admin' })
+  async deleteDishesByAdmin(@Body() payload: DeleteSomeEntitiesDto) {
+    return await this.ourAdvantagesService.deleteAdvantagesByAdmin(payload.ids);
   }
 }

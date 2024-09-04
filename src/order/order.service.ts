@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { OrderItemService } from 'src/order-item/order-item.service';
 import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.service';
 import { OrderDetailsService } from 'src/order-details/order-details.service';
@@ -90,5 +90,17 @@ export class OrderService {
     const order = await this.orderRepository.findOneByOrFail({ id });
     await this.orderRepository.remove(order);
     return { message: 'Order successfully deleted' };
+  }
+
+  async deleteOrdersByAdmin(ids: number[]) {
+    const orders = await this.orderRepository.find({
+      where: { id: In(ids) },
+    });
+
+    if (ids.length !== orders.length) {
+      throw new NotFoundException('Some orders not found');
+    }
+
+    await this.orderRepository.delete({ id: In(ids) });
   }
 }

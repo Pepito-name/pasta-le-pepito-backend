@@ -18,6 +18,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiCustomResponse } from 'src/common';
 import responses from '../responses.json';
 import { AdminAuthGuard } from 'src/auth';
+import { DeleteSomeEntitiesDto } from 'src/common/dto/delete-some-entities.dto';
 
 @Controller('order')
 @ApiTags('order')
@@ -60,5 +61,13 @@ export class OrderController {
   @Delete(':id')
   remove(@Param('id', new ParseIntPipe()) id: number) {
     return this.orderService.remove(id);
+  }
+
+  @Delete()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'delete some orders by admin' })
+  async deleteDishesByAdmin(@Body() payload: DeleteSomeEntitiesDto) {
+    return await this.orderService.deleteOrdersByAdmin(payload.ids);
   }
 }

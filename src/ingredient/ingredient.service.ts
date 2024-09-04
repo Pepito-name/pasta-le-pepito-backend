@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import { Ingredient } from './entities/ingredient.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
 
@@ -67,5 +67,26 @@ export class IngredientService {
       await this.cloudinaryService.deleteFile(publicId);
     }
     return await this.ingredientRepository.delete(ingredient);
+  }
+
+  async deleteIngredientsByAdmin(ids: number[]) {
+    const ingredients = await this.ingredientRepository.find({
+      where: { id: In(ids) },
+    });
+
+    if (ids.length !== ingredients.length) {
+      throw new NotFoundException('Some ingredients not found');
+    }
+
+    await Promise.all(
+      ingredients.map(async (i) => {
+        if (i.image) {
+          const publicId = publicIdExtract(i.image);
+          await this.cloudinaryService.deleteFile(publicId);
+        }
+      }),
+    );
+
+    await this.ingredientRepository.delete({ id: In(ids) });
   }
 }

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
 
@@ -51,6 +51,27 @@ export class DishService {
     const publicId = publicIdExtract(dish.image);
     await this.cloudinaryService.deleteFile(publicId);
     return await this.dishRepository.delete(dish);
+  }
+
+  async deleteDishesByAdmin(ids: number[]) {
+    const dishes = await this.dishRepository.find({
+      where: { id: In(ids) },
+      select: ['image'],
+    });
+
+    if (ids.length !== dishes.length) {
+      throw new NotFoundException('Some dishes not found');
+    }
+
+    await Promise.all(
+      dishes.map(async (d) => {
+        if (d.image) {
+          const publicId = publicIdExtract(d.image);
+          await this.cloudinaryService.deleteFile(publicId);
+        }
+      }),
+    );
+    await this.dishRepository.delete({ id: In(ids) });
   }
 
   async findAllNewsAndHits() {
