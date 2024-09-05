@@ -10,19 +10,22 @@ import { User } from 'src/user/entities/user.entity';
 import { AdminSeedService } from './admin-seed.service';
 import { OurAdvantageSeedService } from './our-advantage/our-advantage-seed.service';
 import { OurAdvantage } from 'src/our-advantages/entities/our-advantage.entity';
+import { InstaPostsSeedService } from './insta-posts/insta-posts-seed.service';
+import { InstaPost } from 'src/insta-posts/entities/insta-post.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       ...dataSourceOptionst,
     }),
-    TypeOrmModule.forFeature([Dish, Ingredient, User, OurAdvantage]),
+    TypeOrmModule.forFeature([Dish, Ingredient, User, OurAdvantage, InstaPost]),
   ],
   providers: [
     DishSeedService,
     IngredientSeedService,
     AdminSeedService,
     OurAdvantageSeedService,
+    InstaPostsSeedService,
   ],
 })
 export class SeedModule {}

@@ -18,7 +18,6 @@ export class IngredientSeedService {
       await Promise.all(
         ingredient.map(async (i) => {
           const newIngredient = new Ingredient(i);
-          newIngredient.image = i.image;
           await this.ingredientRepository.save(newIngredient);
         }),
       );
