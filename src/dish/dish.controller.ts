@@ -34,6 +34,14 @@ import { DeleteSomeEntitiesDto } from '../common/dto/delete-some-entities.dto';
 export class DishController {
   constructor(readonly dishService: DishService) {}
 
+  @Get(':dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'find dish by admin' })
+  async findOneById(@Param('dishId') dishId: number) {
+    return await this.dishService.findOneById(dishId);
+  }
+
   @Get()
   @ApiOperation({ summary: 'get dishes for menu' })
   @ApiCustomResponse(HttpStatus.OK, responses.getAllDishes)
@@ -81,14 +89,6 @@ export class DishController {
     image: Express.Multer.File,
   ) {
     return await this.dishService.updateDish(dishId, payload, image);
-  }
-
-  @Get(':dishId')
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(AdminAuthGuard)
-  @ApiOperation({ summary: 'find dish by admin' })
-  async findOneById(@Param('dishId') dishId: number) {
-    return await this.dishService.findOneById(dishId);
   }
 
   @Delete(':dishId')
