@@ -9,12 +9,15 @@ export class CreateIngredientDto {
   name: string;
 
   @ApiProperty()
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
   @IsNumber()
+  @Min(1)
   weight: number;
 
   @ApiProperty()
   @Transform(({ value }) => parseInt(value, 10))
+  @IsNotEmpty()
   @IsNumber()
   @Min(1)
   price: number;
