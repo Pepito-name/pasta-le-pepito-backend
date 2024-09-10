@@ -133,10 +133,11 @@ export const dish: IDish[] = [
     price: 235,
     image:
       'https://images.bolt.eu/store/2022/2022-06-22/1e6440c7-d8e6-4349-9883-2eca6cac8eaa.jpeg',
+    type: DishType.Other,
   },
 
   {
-    title: 'Напій Пепсі',
+    title: 'Напій Pepsi',
     volume: 0.33,
     price: 72,
     image:

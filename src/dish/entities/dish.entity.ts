@@ -34,7 +34,8 @@ export class Dish {
   @Column({
     type: 'enum',
     enum: DishType,
-    default: DishType.Drink,
+    nullable: true,
+    default: null,
   })
   type: DishType;
 
