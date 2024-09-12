@@ -21,19 +21,20 @@ export class InstaPostsService {
     return await this.instaPostRepository.save(newInstaPost);
   }
 
-  findAll() {
-    return `This action returns all instaPosts`;
+  async findAll() {
+    return await this.instaPostRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} instaPost`;
+  async findOne(id: number) {
+    return await this.instaPostRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, payload: UpdateInstaPostDto) {
+  async update(id: number, payload: UpdateInstaPostDto) {
     return `This action updates a #${id} instaPost`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} instaPost`;
+  async remove(id: number) {
+    const post = await this.instaPostRepository.findOneByOrFail({ id });
+    await this.instaPostRepository.remove(post);
   }
 }

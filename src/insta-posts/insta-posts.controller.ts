@@ -50,8 +50,8 @@ export class InstaPostsController {
   @Get(':id')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.instaPostsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.instaPostsService.findOne(id);
   }
 
   @Patch(':id')
