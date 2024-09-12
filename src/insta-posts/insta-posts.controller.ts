@@ -29,8 +29,8 @@ export class InstaPostsController {
   constructor(private readonly instaPostsService: InstaPostsService) {}
 
   @Post()
-  // @ApiBearerAuth('JWT-auth')
-  // @UseGuards(AdminAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'create insta post by admin' })
