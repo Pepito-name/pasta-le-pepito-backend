@@ -17,7 +17,7 @@ export class OrderItem {
   @ManyToOne(() => Order, (order) => order.orderItems, { onDelete: 'CASCADE' })
   order: Order;
 
-  @ManyToOne(() => Dish, (dish) => dish.orderItems)
+  @ManyToOne(() => Dish, (dish) => dish.orderItems, { eager: true })
   @JoinColumn({ name: 'dishId' })
   dish: Dish;
 
