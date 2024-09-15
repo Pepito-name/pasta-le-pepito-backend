@@ -34,6 +34,20 @@ import { DeleteSomeEntitiesDto } from '../common/dto/delete-some-entities.dto';
 export class DishController {
   constructor(readonly dishService: DishService) {}
 
+  @Get('by-slug/:slug')
+  @ApiOperation({ summary: 'get dish by slug' })
+  findOne(@Param('slug') slug: string) {
+    return this.dishService.findOne(slug);
+  }
+
+  @Get('by-id/:dishId')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'find dish by admin' })
+  async findOneById(@Param('dishId') dishId: number) {
+    return await this.dishService.findOneById(dishId);
+  }
+
   @Get()
   @ApiOperation({ summary: 'get dishes for menu' })
   @ApiCustomResponse(HttpStatus.OK, responses.getAllDishes)
@@ -46,12 +60,6 @@ export class DishController {
   @ApiCustomResponse(HttpStatus.OK, [responses.getHitsAndNewsDishes])
   async findAllNewsAndHits() {
     return this.dishService.findAllNewsAndHits();
-  }
-
-  @Get(':slug')
-  @ApiOperation({ summary: 'get dish by slug' })
-  findOne(@Param('slug') slug: string) {
-    return this.dishService.findOne(slug);
   }
 
   @Post()
@@ -81,14 +89,6 @@ export class DishController {
     image: Express.Multer.File,
   ) {
     return await this.dishService.updateDish(dishId, payload, image);
-  }
-
-  @Get(':dishId')
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(AdminAuthGuard)
-  @ApiOperation({ summary: 'find dish by admin' })
-  async findOneById(@Param('dishId') dishId: number) {
-    return await this.dishService.findOneById(dishId);
   }
 
   @Delete(':dishId')

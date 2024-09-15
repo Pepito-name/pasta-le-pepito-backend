@@ -6,4 +6,5 @@ export enum DishType {
   Salad = 'Салати',
   Soup = 'Суп',
   Drink = 'Напій',
+  Other = 'Інше',
 }

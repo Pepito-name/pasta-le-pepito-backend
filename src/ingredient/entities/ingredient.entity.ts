@@ -28,7 +28,7 @@ export class Ingredient {
 
   constructor(payload: CreateIngredientDto | IIngredient) {
     if (!payload) return;
-
+    if (typeof payload.image === 'string') this.image = payload.image;
     this.name = payload.name;
     this.price = payload.price;
     this.weight = payload.weight;
