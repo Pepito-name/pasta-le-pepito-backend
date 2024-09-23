@@ -2,40 +2,51 @@
   "getHitsAndNewsDishes": {
     "hits": [
       {
-        "id": 10,
-        "title": "title",
-        "weight": 320,
-        "price": 329,
+        "id": 7,
+        "title": "Паста з телятиною та овочами",
+        "slug": "pasta-z-telyatinoyu-ta-ovochami",
+        "weight": 400,
+        "volume": null,
+        "composition": "Ніжна телятина та овочі у вершково-пряному соусі",
+        "price": 345,
         "image": "https://images.....",
-        "isHit": true,
-        "isNew": false
+        "type": "Паста",
+        "orderCount": 99,
+        "isNew": false,
+        "customizable": true
       }
     ],
     "news": [
       {
-        "id": 10,
-        "title": "title",
-        "weight": 320,
-        "composition": "string",
-        "price": 329,
-        "image": "https://images.....",
-        "isHit": true,
-        "isNew": false
+        "id": 2,
+        "title": "Паста з морепродуктів",
+        "slug": "pasta-z-moreproduktiv",
+        "weight": 380,
+        "volume": null,
+        "composition": "Мідії, креветки, кальмар, соєвий соус, часник, овочі, вершки",
+        "price": 470,
+        "image": "https://images.bolt.eu/store/2022/2022-03-29/c41e6701-c8ae-4e31-beb9-55e71b4c1273.jpeg",
+        "type": "Паста",
+        "orderCount": 30,
+        "isNew": true,
+        "customizable": true
       }
     ]
   },
   "getAllDishes": [
     {
-      "id": 2,
-      "title": "Паста з морепродуктів",
-      "weight": 380,
+      "id": 1,
+      "title": "Напій Pepsi zero",
+      "slug": "napij-pepsi-zero",
+      "weight": null,
       "volume": null,
-      "composition": "Мідії, креветки, кальмар, соєвий соус, часник, овочі, вершки",
-      "price": 470,
-      "image": "https://images.....",
-      "type": "Паста",
-      "isHit": false,
-      "isNew": false
+      "composition": null,
+      "price": 72,
+      "image": "https://images...",
+      "type": "Напій",
+      "orderCount": 42,
+      "isNew": false,
+      "customizable": false
     }
   ],
   "getIngredients": { "id": 1, "name": "курка", "price": 88, "image": null },
