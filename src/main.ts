@@ -24,7 +24,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://pasta-la-pepito.vercel.app',
+      'https://pasta-client.vercel.app',
       'http://localhost:3000',
       'https://localhost:3000',
     ],
