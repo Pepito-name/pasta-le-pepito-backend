@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInstaPostDto } from './dto/create-insta-post.dto';
 import { UpdateInstaPostDto } from './dto/update-insta-post.dto';
 import { InstaPost } from './entities/insta-post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class InstaPostsService {
@@ -36,5 +36,17 @@ export class InstaPostsService {
   async remove(id: number) {
     const post = await this.instaPostRepository.findOneByOrFail({ id });
     await this.instaPostRepository.remove(post);
+  }
+
+  async deletePostsByAdmin(ids: number[]) {
+    const orders = await this.instaPostRepository.find({
+      where: { id: In(ids) },
+    });
+
+    if (ids.length !== orders.length) {
+      throw new NotFoundException('Some posts not found');
+    }
+
+    await this.instaPostRepository.delete({ id: In(ids) });
   }
 }

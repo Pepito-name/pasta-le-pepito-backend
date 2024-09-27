@@ -22,6 +22,7 @@ import {
 import { AdminAuthGuard } from 'src/auth';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CustomParseFilePipe } from 'src/common';
+import { DeleteSomeEntitiesDto } from 'src/common/dto/delete-some-entities.dto';
 
 @ApiTags('instaPosts')
 @Controller('insta-posts')
@@ -45,6 +46,12 @@ export class InstaPostsController {
   @Get()
   async findAll() {
     return this.instaPostsService.findAll();
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'delete some posts by admin' })
+  async deletePostsByAdmin(@Body() payload: DeleteSomeEntitiesDto) {
+    return await this.instaPostsService.deletePostsByAdmin(payload.ids);
   }
 
   @Get(':id')
