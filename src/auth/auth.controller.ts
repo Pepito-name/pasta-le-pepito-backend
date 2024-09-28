@@ -1,7 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginAdminDto } from 'src/admin/dto/login-admin.dto';
+import { LocalAuthGuard } from './guards/local.guard';
+import { User } from 'src/common';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -9,7 +11,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('admin/login')
-  async adminLogin(@Body() payload: LoginAdminDto) {
-    return await this.authService.adminLogin(payload);
+  @UseGuards(LocalAuthGuard)
+  @ApiBody({ type: LoginAdminDto })
+  async adminLogin(@User() user: any) {
+    return await this.authService.adminLogin(user);
   }
 }

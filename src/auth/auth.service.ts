@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { LoginAdminDto } from 'src/admin/dto/login-admin.dto';
-import { AdminService } from 'src/admin/admin.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    readonly adminService: AdminService,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async adminLogin(payload: LoginAdminDto) {
-    const admin = await this.adminService.adminlogin(payload);
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        email,
+        isRegistered: true,
+      },
+    });
+    if (!user.password) {
+      throw new BadRequestException('You must set a password for your account');
+    }
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
+    return null;
+  }
 
+  async adminLogin(user: any) {
     const { accessToken, refreshToken } = await this.generateTokens(
-      admin.email,
-      admin.role,
-      admin.id,
+      user.email,
+      user.role,
+      user.id,
     );
-    return { admin, accessToken, refreshToken };
+    return { user, accessToken, refreshToken };
   }
 
   async generateTokens(email: string, role: string, id: number) {

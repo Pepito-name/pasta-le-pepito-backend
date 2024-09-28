@@ -6,7 +6,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
@@ -19,6 +18,7 @@ import { User } from 'src/common';
 
 import { DishService } from 'src/dish/dish.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { ChangeAdminPasswordDto } from './dto/update-admin-password.dto';
 
 @Controller('admin')
 @ApiTags('admin')
@@ -39,9 +39,18 @@ export class AdminController {
   async create(@Body() payload: CreateAdminDto) {
     return this.adminService.create(payload);
   }
+
   @Patch('me')
   async update(@Body() payload: UpdateAdminDto, @User('id') userId: number) {
     return this.adminService.update(userId, payload);
+  }
+
+  @Patch('change-password')
+  async changePassword(
+    @Body() payload: ChangeAdminPasswordDto,
+    @User('id') userId: number,
+  ) {
+    return this.adminService.changePassword(userId, payload);
   }
 
   @Delete('me')
