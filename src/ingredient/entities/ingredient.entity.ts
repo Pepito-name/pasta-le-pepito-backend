@@ -11,6 +11,9 @@ export class Ingredient {
   @Column()
   name: string;
 
+  @Column()
+  label: string;
+
   @Column({ type: 'float' })
   price: number;
 
@@ -30,6 +33,7 @@ export class Ingredient {
     if (!payload) return;
     if (typeof payload.image === 'string') this.image = payload.image;
     this.name = payload.name;
+    this.label = payload.label;
     this.price = payload.price;
     this.weight = payload.weight;
   }

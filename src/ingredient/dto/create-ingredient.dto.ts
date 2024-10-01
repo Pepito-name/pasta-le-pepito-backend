@@ -8,6 +8,11 @@ export class CreateIngredientDto {
   @IsString()
   name: string;
 
+  @ApiProperty({ description: 'english translation of name' })
+  @IsNotEmpty()
+  @IsString()
+  label: string;
+
   @ApiProperty()
   @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
