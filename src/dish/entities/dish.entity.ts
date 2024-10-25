@@ -45,7 +45,7 @@ export class Dish {
   @Column({ type: 'boolean', default: false })
   isNew: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: true })
   customizable: boolean;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.dish, {
