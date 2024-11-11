@@ -29,7 +29,7 @@ export class DishService {
   ) {
     const dish = await this.dishRepository.findOneByOrFail({ id });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { image: payImage, ...data } = payload;
+    const { image: payImage, category, ...data } = payload;
 
     if (image) {
       if (dish.image) {
@@ -41,6 +41,7 @@ export class DishService {
     }
 
     const updatedDish = this.dishRepository.merge(dish, data);
+    // updatedDish.category = null;
     await this.dishRepository.save(updatedDish);
 
     return updatedDish;
