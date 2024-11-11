@@ -6,17 +6,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class DishService {
   constructor(
     @InjectRepository(Dish)
     private dishRepository: Repository<Dish>,
+
     private cloudinaryService: CloudinaryService,
+    private categoryService: CategoryService,
   ) {}
 
   async createDish(payload: CreateDishDto, image: Express.Multer.File) {
     const newDish = new Dish(payload);
+
+    newDish.category = await this.categoryService.findOneByParam({
+      name: payload.category,
+    });
+
     const { secure_url } = await this.cloudinaryService.uploadFile(image);
     newDish.image = secure_url;
     return await this.dishRepository.save(newDish);
@@ -29,7 +37,7 @@ export class DishService {
   ) {
     const dish = await this.dishRepository.findOneByOrFail({ id });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { image: payImage, ...data } = payload;
+    const { image: payImage, category, ...data } = payload;
 
     if (image) {
       if (dish.image) {
@@ -41,6 +49,13 @@ export class DishService {
     }
 
     const updatedDish = this.dishRepository.merge(dish, data);
+
+    if (payload.category) {
+      updatedDish.category = await this.categoryService.findOneByParam({
+        name: payload.category,
+      });
+    }
+
     await this.dishRepository.save(updatedDish);
 
     return updatedDish;

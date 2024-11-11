@@ -1,9 +1,15 @@
-import { DishType } from 'src/common';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CreateDishDto } from '../dto/create-dish.dto';
 import { IDish } from '../../database/seeds/dish/dish-data';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
 import slug from 'slug';
+import { Category } from 'src/category/entities/category.entity';
 
 @Entity()
 export class Dish {
@@ -31,14 +37,6 @@ export class Dish {
   @Column({ nullable: true })
   image: string | null;
 
-  @Column({
-    type: 'enum',
-    enum: DishType,
-    nullable: true,
-    default: null,
-  })
-  type: DishType;
-
   @Column({ type: 'integer', default: 0 })
   orderCount: number;
 
@@ -53,6 +51,9 @@ export class Dish {
   })
   orderItems: OrderItem[];
 
+  @ManyToOne(() => Category, (category) => category.dishes, { eager: true })
+  category: Category;
+
   constructor(payload: CreateDishDto | IDish) {
     if (!payload) return;
 
@@ -61,7 +62,6 @@ export class Dish {
     this.volume = payload.volume;
     this.composition = payload.composition;
     this.price = payload.price;
-    this.type = payload.type;
     this.isNew = payload.isNew;
     this.slug = slug(payload.title, { lower: true });
     if (payload.customizable) {

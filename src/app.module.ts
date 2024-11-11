@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OurAdvantagesModule } from './our-advantages/our-advantages.module';
 import { InstaPostsModule } from './insta-posts/insta-posts.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { InstaPostsModule } from './insta-posts/insta-posts.module';
     CloudinaryModule,
     OurAdvantagesModule,
     InstaPostsModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [

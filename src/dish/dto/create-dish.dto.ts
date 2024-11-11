@@ -1,13 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsBoolean,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { DishType } from 'src/common';
 
 export class CreateDishDto {
@@ -39,10 +32,9 @@ export class CreateDishDto {
   @ApiProperty({ type: 'string', format: 'binary' })
   image: Express.Multer.File;
 
-  @ApiProperty({ example: DishType.Pasta })
-  @IsOptional()
-  @IsEnum(DishType)
-  type: DishType;
+  @ApiProperty({ example: 'паста' })
+  @IsString()
+  category: string;
 
   @ApiProperty({ example: false })
   @Transform(({ value }) => value === 'true' || value === true)

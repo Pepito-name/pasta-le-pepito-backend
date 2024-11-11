@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class DeleteSomeEntitiesDto {
   @ApiProperty({
-    example: [1, 2, 3, 4],
+    example: [1, 2, 3],
     description: 'Array of entity IDs to be deleted',
     type: [Number],
   })
