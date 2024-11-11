@@ -10,6 +10,8 @@ import { Dish } from 'src/dish/entities/dish.entity';
 import { DishService } from 'src/dish/dish.service';
 import { IngredientService } from 'src/ingredient/ingredient.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Category } from 'src/category/entities/category.entity';
+import { CategoryService } from 'src/category/category.service';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
       OrderItemIngredient,
       Ingredient,
       Dish,
+      Category,
     ]),
   ],
   controllers: [],
@@ -27,6 +30,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
     DishService,
     IngredientService,
     CloudinaryService,
+    CategoryService,
   ],
 })
 export class OrderItemModule {}

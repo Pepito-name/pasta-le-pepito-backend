@@ -34,7 +34,7 @@ export class CreateDishDto {
 
   @ApiProperty({ example: 'паста' })
   @IsString()
-  category: DishType;
+  category: string;
 
   @ApiProperty({ example: false })
   @Transform(({ value }) => value === 'true' || value === true)

@@ -16,6 +16,8 @@ import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.servi
 import { OrderDetailsService } from 'src/order-details/order-details.service';
 import { IngredientService } from 'src/ingredient/ingredient.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Category } from 'src/category/entities/category.entity';
+import { CategoryService } from 'src/category/category.service';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
       OrderItemIngredient,
       Ingredient,
       DeliveryAdress,
+      Category,
     ]),
   ],
   controllers: [OrderController],
@@ -39,6 +42,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
     OrderDetailsService,
     IngredientService,
     CloudinaryService,
+    CategoryService,
   ],
 })
 export class OrderModule {}

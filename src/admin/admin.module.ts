@@ -9,10 +9,12 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Category } from 'src/category/entities/category.entity';
+import { CategoryService } from 'src/category/category.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Dish]),
+    TypeOrmModule.forFeature([User, Dish, Category]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
@@ -24,7 +26,7 @@ import { ConfigService } from '@nestjs/config';
     DishService,
     CloudinaryService,
     AuthService,
-
+    CategoryService,
     ConfigService,
   ],
 })
