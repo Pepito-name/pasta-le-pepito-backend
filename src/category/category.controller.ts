@@ -18,30 +18,34 @@ import { DeleteCategoryDto } from './dto/delete-category.dto';
 
 @Controller('category')
 @ApiTags('category')
-@ApiBearerAuth('JWT-auth')
-@UseGuards(AdminAuthGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'create category by admin' })
   async create(@Body() payload: CreateCategoryDto) {
     return await this.categoryService.create(payload);
   }
 
   @Get()
-  @ApiOperation({ summary: 'get categories by admin' })
+  @ApiOperation({ summary: 'get categories' })
   async findAll() {
     return await this.categoryService.findAll();
   }
 
   @Get(':id')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'get one category by admin' })
   async findOne(@Param('id', new ParseIntPipe()) id: number) {
     return await this.categoryService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'update one category by admin' })
   async update(
     @Param('id', new ParseIntPipe()) id: number,
