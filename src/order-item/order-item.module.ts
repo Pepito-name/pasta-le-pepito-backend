@@ -12,6 +12,7 @@ import { IngredientService } from 'src/ingredient/ingredient.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { Category } from 'src/category/entities/category.entity';
 import { CategoryService } from 'src/category/category.service';
+import { EmailService } from 'src/services/email.service';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CategoryService } from 'src/category/category.service';
     IngredientService,
     CloudinaryService,
     CategoryService,
+    EmailService,
   ],
 })
 export class OrderItemModule {}

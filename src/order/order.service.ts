@@ -7,6 +7,7 @@ import { DataSource, In, Repository } from 'typeorm';
 import { OrderItemService } from 'src/order-item/order-item.service';
 import { DeliveryAdressService } from 'src/delivery-adress/delivery-adress.service';
 import { OrderDetailsService } from 'src/order-details/order-details.service';
+import { EmailService } from 'src/services/email.service';
 
 @Injectable()
 export class OrderService {
@@ -16,6 +17,7 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly orderDetailsService: OrderDetailsService,
     private readonly deliveryAdressService: DeliveryAdressService,
+    private readonly emailService: EmailService,
     private datasource: DataSource,
   ) {}
 
@@ -62,6 +64,16 @@ export class OrderService {
       newOrder.pickup = payload.pickup;
 
       const createdOrder = await manager.save(newOrder);
+
+      if (createdOrder.orderDetail.email) {
+        await this.emailService.sendOrderInfo(
+          createdOrder.orderDetail.email,
+          createdOrder.number,
+          createdOrder.totalPrice,
+          createdOrder.orderDetail.date,
+          createdOrder.deliveryAdress,
+        );
+      }
 
       await queryRunner.commitTransaction();
 

@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { publicIdExtract } from 'src/common';
+import { EmailService } from 'src/services/email.service';
 
 @Injectable()
 export class IngredientService {
@@ -13,6 +14,7 @@ export class IngredientService {
     @InjectRepository(Ingredient)
     private ingredientRepository: Repository<Ingredient>,
     readonly cloudinaryService: CloudinaryService,
+    readonly emailService: EmailService,
   ) {}
 
   async getOneById(id: number) {
@@ -27,6 +29,7 @@ export class IngredientService {
   }
 
   async findAll() {
+    await this.emailService.sendHelo('griprumefiye-6704@yopmail.com');
     return await this.ingredientRepository.find();
   }
 
