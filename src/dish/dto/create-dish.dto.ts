@@ -42,10 +42,7 @@ export class CreateDishDto {
   isNew: boolean;
 
   @ApiProperty({ example: false })
-  @Transform(({ value }) => {
-    console.log('Transform value:', value); // Додайте цей рядок
-    return value === 'true' || value === true;
-  })
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   customizable: boolean;
 }

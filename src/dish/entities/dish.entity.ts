@@ -43,7 +43,7 @@ export class Dish {
   @Column({ type: 'boolean', default: false })
   isNew: boolean;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', default: false })
   customizable: boolean;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.dish, {
@@ -65,7 +65,6 @@ export class Dish {
     this.isNew = payload.isNew;
     this.slug = slug(payload.title, { lower: true });
     if (payload.customizable) {
-      console.log('payload :>> ', payload.customizable);
       this.customizable = payload.customizable;
     }
   }

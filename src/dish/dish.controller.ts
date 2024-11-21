@@ -63,8 +63,8 @@ export class DishController {
   }
 
   @Post()
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(AdminAuthGuard)
+  // @ApiBearerAuth('JWT-auth')
+  // @UseGuards(AdminAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'create dish by admin' })
