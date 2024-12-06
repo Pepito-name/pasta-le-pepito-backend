@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +15,6 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -33,6 +36,10 @@ export class AuthService {
   }
 
   async adminLogin(user: any) {
+    const admin = user as User;
+    admin.isLoggedIn = true;
+    await this.userRepository.save(admin);
+
     const { accessToken, refreshToken } = await this.generateTokens(
       user.email,
       user.role,
@@ -66,5 +73,27 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async refreshTokens(prevRefresh: string) {
+    const payload = await this.jwtService.verifyAsync(prevRefresh, {
+      secret: this.configService.get<string>('REFRESH_JWT_SECRET'),
+    });
+    console.log('payload :>> ', payload);
+
+    const now = Math.floor(Date.now() / 1000);
+
+    if (payload.exp < now) {
+      const admin = await this.userRepository.findOneBy({ id: payload.sub });
+      admin.isLoggedIn = false;
+      await this.userRepository.save(admin);
+      throw new UnauthorizedException('Expired refresh token');
+    }
+    const { accessToken, refreshToken } = await this.generateTokens(
+      payload.email,
+      payload.role,
+      payload.sub,
+    );
+    return { accessToken, refreshToken };
   }
 }

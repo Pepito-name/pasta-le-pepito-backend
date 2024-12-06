@@ -24,6 +24,9 @@ export class User {
   @Column()
   isRegistered: boolean;
 
+  @Column({ default: false })
+  isLoggedIn: boolean;
+
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
 
